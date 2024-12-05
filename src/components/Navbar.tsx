@@ -1,39 +1,66 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
+import { useSession, signOut } from "next-auth/react";
+import { Search, User, LogOut } from 'lucide-react';
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { data: session } = useSession();
 
   const closeMenu = () => {
     setMenuOpen(false);
   };
 
+  const handleSignOut = () => {
+    signOut();
+    closeMenu();
+  };
+
   return (
     <nav className="bg-[#fdfcf8] flex justify-between items-center px-4 py-4 lg:px-8 w-full relative z-50">
       {/* Logo */}
-      <div className="text-black text-3xl font-cursive">Chartify</div>
+      <Link href="/" className="text-black text-3xl font-cursive">
+        Chartify
+      </Link>
 
       {/* Search Input (Visible on larger screens) */}
       <div className="hidden sm:flex items-center">
-        <input
-          type="text"
-          placeholder="Search..."
-          className="border border-gray-300 rounded-md px-4 py-2 text-sm placeholder-gray-500 focus:outline-none focus:border-[#4b9ec1] transition-colors"
-        />
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search..."
+            className="border border-gray-300 rounded-md pl-10 pr-4 py-2 text-sm placeholder-gray-500 focus:outline-none focus:border-[#4b9ec1] transition-colors"
+          />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+        </div>
       </div>
 
       {/* Desktop Links */}
-      <div className="hidden sm:flex space-x-6 text-[#4b9ec1] text-lg">
-        <Link href="#" className="hover:underline transition-all">
-          Charts
+      <div className="hidden sm:flex space-x-6 text-[#4b9ec1] text-lg items-center">
+        <Link href="/dashboard" className="hover:underline transition-all">
+          Dashboard
         </Link>
-        <Link href="#" className="hover:underline transition-all">
-          Network
+        <Link href="/analytics" className="hover:underline transition-all">
+          Analytics
         </Link>
-        <Link href="#" className="hover:underline transition-all">
+        <Link href="/pricing" className="hover:underline transition-all">
           Pricing
         </Link>
+        {session ? (
+          <>
+            <Link href="/profile" className="hover:underline transition-all">
+              <User size={24} />
+            </Link>
+            <button onClick={() => signOut()} className="hover:underline transition-all">
+              <LogOut size={24} />
+            </button>
+          </>
+        ) : (
+          <Link href="/login" className="hover:underline transition-all">
+            Login
+          </Link>
+        )}
       </div>
 
       {/* Mobile Menu Toggle */}
@@ -62,38 +89,65 @@ const Navbar = () => {
         </button>
 
         {/* Mobile Search Input */}
-        <div className="w-full max-w-md mb-6">
+        <div className="w-full max-w-md mb-6 relative">
           <input
             type="text"
             placeholder="Search..."
-            className="w-full border border-gray-300 rounded-md px-4 py-3 text-lg placeholder-gray-500 focus:outline-none focus:border-[#4b9ec1] transition-colors"
+            className="w-full border border-gray-300 rounded-md pl-10 pr-4 py-3 text-lg placeholder-gray-500 focus:outline-none focus:border-[#4b9ec1] transition-colors"
           />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={24} />
         </div>
 
-        <a 
-          href="#" 
+        <Link 
+          href="/dashboard" 
           className="text-[#4b9ec1] text-2xl hover:underline transition-all"
           onClick={closeMenu}
         >
-          Charts
-        </a>
-        <a 
-          href="#" 
+          Dashboard
+        </Link>
+        <Link 
+          href="/analytics" 
           className="text-[#4b9ec1] text-2xl hover:underline transition-all"
           onClick={closeMenu}
         >
-          Network
-        </a>
-        <a 
-          href="#" 
+          Analytics
+        </Link>
+        <Link 
+          href="/pricing" 
           className="text-[#4b9ec1] text-2xl hover:underline transition-all"
           onClick={closeMenu}
         >
           Pricing
-        </a>
+        </Link>
+        {session ? (
+          <>
+            <Link 
+              href="/profile" 
+              className="text-[#4b9ec1] text-2xl hover:underline transition-all flex items-center"
+              onClick={closeMenu}
+            >
+              <User size={24} className="mr-2" /> Profile
+            </Link>
+            <button 
+              onClick={handleSignOut}
+              className="text-[#4b9ec1] text-2xl hover:underline transition-all flex items-center"
+            >
+              <LogOut size={24} className="mr-2" /> Logout
+            </button>
+          </>
+        ) : (
+          <Link 
+            href="/login" 
+            className="text-[#4b9ec1] text-2xl hover:underline transition-all"
+            onClick={closeMenu}
+          >
+            Login
+          </Link>
+        )}
       </div>
     </nav>
   );
 };
 
 export default Navbar;
+

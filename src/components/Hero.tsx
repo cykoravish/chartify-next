@@ -5,11 +5,29 @@ import VideoPlayer from "./VideoComponent";
 const HeroSection = () => {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // TODO: Implement actual email collection logic
-    setSubmitted(true);
+    setError("");
+    try {
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Registration failed');
+      }
+
+      setSubmitted(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    }
   };
 
   return (
@@ -52,6 +70,11 @@ const HeroSection = () => {
             ) : (
               <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-md max-w-md mx-auto lg:mx-0">
                 Thank you! We&apos;ll keep you updated on our launch.
+              </div>
+            )}
+            {error && (
+              <div className="mt-4 text-red-600 max-w-md mx-auto lg:mx-0">
+                {error}
               </div>
             )}
           </div>
