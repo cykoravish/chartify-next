@@ -74,3 +74,35 @@ export const Waitlist =
   mongoose.models.Waitlist || mongoose.model('Waitlist', WaitlistSchema);
 
 export default connectDB;
+
+
+///////////////////////////////////////////////////////////////
+const SocialLeadSchema = new mongoose.Schema({
+  platform: {
+    type: String,
+    required: true,
+    enum: ['twitter', 'linkedin', 'facebook']
+  },
+  username: {
+    type: String,
+    required: true,
+  },
+  profileUrl: {
+    type: String,
+    required: true,
+  },
+  keywords: [String],
+  contactStatus: {
+    type: String,
+    enum: ['not-contacted', 'approached', 'interested', 'converted'],
+    default: 'not-contacted'
+  },
+  notes: String,
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+export const SocialLead = 
+  mongoose.models.SocialLead || mongoose.model('SocialLead', SocialLeadSchema);
