@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import NextAuth, { Session } from "next-auth";
+import NextAuth, { Session, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import clientPromise from "@/lib/mongodb";
 import { compare } from "bcrypt";
 import { JWT } from "next-auth/jwt";
 
+// Define Custom types for JWT and Session
 interface CustomJWT extends JWT {
   id?: string;
 }
@@ -18,7 +19,8 @@ interface CustomSession extends Session {
   };
 }
 
-export const authOptions: any = {
+// Define authOptions with correct types
+const authOptions:any = {
   adapter: MongoDBAdapter(clientPromise),
   providers: [
     CredentialsProvider({
@@ -72,15 +74,9 @@ export const authOptions: any = {
     signIn: "/login",
   },
   callbacks: {
-    // async jwt({ token, user }) {
-    //   if (user) {
-    //     token.id = user.id
-    //   }
-    //   return token
-    // },
-    async jwt({ token, user }: { token: CustomJWT; user?: any }) {
+    async jwt({ token, user }: { token: CustomJWT; user?: User }) {
       if (user) {
-        token.id = user.id; // Add the user id to the token
+        token.id = user.id as string; // Add the user id to the token
       }
       return token;
     },
@@ -99,6 +95,5 @@ export const authOptions: any = {
   },
 };
 
-const handler = NextAuth(authOptions);
-
-export { handler as GET, handler as POST };
+// Export NextAuth handler as default
+export default NextAuth(authOptions);
