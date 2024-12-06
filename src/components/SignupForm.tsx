@@ -1,50 +1,59 @@
-'use client'
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { AlertCircle, User, Mail, Lock } from 'lucide-react'
-import { toast } from "sonner"
-import { motion } from "framer-motion"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle, User, Mail, Lock } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { motion } from "framer-motion";
 
 export function SignupForm() {
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [error, setError] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError("")
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
     try {
-      const response = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),
-      })
+      });
 
       if (response.ok) {
-        toast.success("Account created successfully! Please log in.")
-        router.push('/login')
+        router.push("/login");
+        toast({
+          description: "Account created successfully! Please log in.",
+        });
       } else {
-        const data = await response.json()
-        setError(data.error || "An error occurred during signup.")
-        toast.error(data.error || "An error occurred during signup.")
+        const data = await response.json();
+        setError(data.error || "An error occurred during signup.");
+        toast({
+          variant: "destructive",
+          description: data.error || "An error occurred during signup.",
+        });
       }
     } catch (error) {
-      console.error("An error occurred during signup:", error)
-      setError("An error occurred during signup. Please try again.")
-      toast.error("An error occurred during signup. Please try again.")
+      console.error("An error occurred during signup:", error);
+      setError("An error occurred during signup. Please try again.");
+      toast({
+        variant: "destructive",
+        description: "An error occurred during signup. Please try again.",
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <motion.form
@@ -64,7 +73,10 @@ export function SignupForm() {
             Name
           </Label>
           <div className="relative">
-            <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+            <User
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              size={20}
+            />
             <Input
               id="name"
               name="name"
@@ -86,7 +98,10 @@ export function SignupForm() {
             Email address
           </Label>
           <div className="relative">
-            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+            <Mail
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              size={20}
+            />
             <Input
               id="email-address"
               name="email"
@@ -109,7 +124,10 @@ export function SignupForm() {
             Password
           </Label>
           <div className="relative">
-            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+            <Lock
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              size={20}
+            />
             <Input
               id="password"
               name="password"
@@ -161,6 +179,5 @@ export function SignupForm() {
         </Button>
       </motion.div>
     </motion.form>
-  )
+  );
 }
-

@@ -1,32 +1,37 @@
 "use client";
 import { useState } from "react";
 import VideoPlayer from "./VideoComponent";
+import { LoaderCircle } from "lucide-react";
 
 const HeroSection = () => {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
     try {
-      const response = await fetch('/api/register', {
-        method: 'POST',
+      setLoading(true);
+      const response = await fetch("/api/register", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ email }),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Registration failed');
+        throw new Error(errorData.error || "Registration failed");
       }
 
       setSubmitted(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -62,9 +67,14 @@ const HeroSection = () => {
                 />
                 <button
                   type="submit"
+                  disabled={loading}
                   className="bg-[#75d156] text-white px-6 py-3 rounded-md shadow-md hover:bg-[#81eb5d] font-semibold text-sm sm:text-base whitespace-nowrap"
                 >
-                  Get Early Access
+                  {loading ? (
+                    <LoaderCircle className="animate-spin" />
+                  ) : (
+                    "Get Early Access"
+                  )}
                 </button>
               </form>
             ) : (
@@ -81,10 +91,7 @@ const HeroSection = () => {
 
           {/* Right Video */}
           <div className="w-full lg:w-1/2 mt-8 lg:mt-0">
-            <VideoPlayer
-              src="/charts.mp4"
-              poster="/charts.png"
-            />
+            <VideoPlayer src="/charts.mp4" poster="/charts.png" />
           </div>
         </div>
       </div>
@@ -93,4 +100,3 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
-

@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Chartify
 
-## Getting Started
+![Chartify Logo](./public/chartify-logo.png)
 
-First, run the development server:
+## 🎙️ The Next-Gen Podcast Analytics Tool
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Chartify is your go-to solution for comprehensive podcast analytics, designed to fill the void left by Chartable's shutdown. Built with cutting-edge technologies, Chartify offers podcasters powerful insights and analytics to grow their audience and optimize their content.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Early Bird Offer!
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+🎉 **Get 20% Premium Features FREE!** 🎉
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Register now to secure your early bird offer and elevate your podcast game!
 
-## Learn More
+[Sign Up for Early Access](https://chartify.com/early-access)
 
-To learn more about Next.js, take a look at the following resources:
+## ✨ Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- 📊 Comprehensive podcast analytics dashboard
+- 👥 Audience demographics and listener behavior insights
+- 🌍 Geographic distribution of your listeners
+- 📈 Episode performance metrics
+- 🔗 Attribution and marketing campaign tracking
+- 🎨 Beautiful, interactive charts and visualizations
+- 📱 Responsive design for desktop and mobile
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🛠️ Technologies Used
 
-## Deploy on Vercel
+- **Frontend:**
+  - Next.js
+  - TypeScript
+  - shadcn/ui
+  - Framer Motion for animations
+  - Recharts for data visualization
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Backend:**
+  - Node.js
+  - Express.js
+  - MongoDB for data storage
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Authentication:**
+  - NextAuth.js
+
+- **Deployment:**
+  - Vercel (Frontend)
+  - MongoDB Atlas (Database)
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js (v14 or later)
+- npm or yarn
+- MongoDB
+
+### Installation
+
+1. Clone the repository:
+
