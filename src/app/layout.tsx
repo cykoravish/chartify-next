@@ -11,7 +11,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // State to track if the client is mounted
+
   const [mounted, setMounted] = useState(false);
 
   // Ensures the component only mounts on the client side
@@ -19,7 +19,6 @@ export default function RootLayout({
     setMounted(true);
   }, []);
 
-  // Prevents the mismatch between the server-rendered and client-rendered theme
   if (!mounted) {
     return (
       <html lang="en">
@@ -32,6 +31,9 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        <title>Chartify - Alternative to chartable</title>
+      </head>
       <body>
         <ThemeProvider
           attribute="class"

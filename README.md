@@ -1,6 +1,6 @@
 # Chartify
 
-![Chartify Logo](./public/chartify-logo.png)
+![Chartify Logo](./public/chartifyFront.png)
 
 ## 🎙️ The Next-Gen Podcast Analytics Tool
 
@@ -12,7 +12,7 @@ Chartify is your go-to solution for comprehensive podcast analytics, designed to
 
 Register now to secure your early bird offer and elevate your podcast game!
 
-[Sign Up for Early Access](https://chartify.com/early-access)
+[Sign Up for Early Access](https://projectify.fun)
 
 ## ✨ Features
 
@@ -42,7 +42,7 @@ Register now to secure your early bird offer and elevate your podcast game!
   - NextAuth.js
 
 - **Deployment:**
-  - Vercel (Frontend)
+  - VPS (Frontend)
   - MongoDB Atlas (Database)
 
 ## 🚀 Getting Started
@@ -53,7 +53,34 @@ Register now to secure your early bird offer and elevate your podcast game!
 - npm or yarn
 - MongoDB
 
-### Installation
+## ⚙️ Installation
 
-1. Clone the repository:
+To run the project locally, follow these steps:
 
+Clone the repository:
+   ```bash
+   git clone https://github.com/cykoravish/chartify-next.git
+   cd chartify-next
+   npm install
+   npm run dev
+```
+## 🔑 Features to Come
+
+   - Advanced Analytics Reports
+   - Integration with additional podcast platforms
+   - Real-time audience insights
+   - Support for premium podcast hosting services
+
+## 📢 Contributing
+
+If you'd like to contribute to the development of Chartify, feel free to open an issue or submit a pull request. We welcome contributions that improve the user experience, add new features, or fix bugs!
+
+    Fork the repository.
+   - Create a new branch (git checkout -b feature-name).
+   - Commit your changes (git commit -am 'Add feature-name').
+   - Push to the branch (git push origin feature-name).
+   - Create a new pull request.
+
+##   📬 Contact
+
+For more information or inquiries, please contact us at [ravishbisht86@gmail.com]
