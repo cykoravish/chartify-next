@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertCircle } from 'lucide-react'
+import { toast } from "sonner"
 
 export function SignupForm() {
   const [name, setName] = useState("")
@@ -29,6 +30,7 @@ export function SignupForm() {
       } else {
         const data = await response.json()
         setError(data.error || "An error occurred during signup.")
+        toast(data.error || "An error occurred during signup.")
       }
     } catch (error) {
       console.error("An error occurred during signup:", error)

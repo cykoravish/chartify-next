@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import { AuthProvider } from "@/components/AuthProvider";
 import "@/app/globals.css"
+import { Toaster } from "@/components/ui/toaster";
 
 export default function RootLayout({
   children,
@@ -16,6 +17,7 @@ export default function RootLayout({
             <Navbar />
           </Suspense>
           <main>{children}</main>
+          <Toaster />
         </AuthProvider>
       </body>
     </html>
