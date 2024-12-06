@@ -2,18 +2,18 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useSession, signOut } from "next-auth/react";
-import { Search, User, LogOut } from 'lucide-react';
+import { Search, User, LogOut } from "lucide-react";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { data: session } = useSession();
-
+  const { data: session, status } = useSession();
+  console.log("session:", session);
   const closeMenu = () => {
     setMenuOpen(false);
   };
 
-  const handleSignOut = () => {
-    signOut();
+  const handleSignOut = async () => {
+    await signOut({ redirect: false });
     closeMenu();
   };
 
@@ -32,27 +32,37 @@ const Navbar = () => {
             placeholder="Search..."
             className="border border-gray-300 rounded-md pl-10 pr-4 py-2 text-sm placeholder-gray-500 focus:outline-none focus:border-[#4b9ec1] transition-colors"
           />
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+          <Search
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+            size={18}
+          />
         </div>
       </div>
 
       {/* Desktop Links */}
       <div className="hidden sm:flex space-x-6 text-[#4b9ec1] text-lg items-center">
-        <Link href="/dashboard" className="hover:underline transition-all">
-          Dashboard
-        </Link>
-        <Link href="/analytics" className="hover:underline transition-all">
-          Analytics
-        </Link>
-        <Link href="/pricing" className="hover:underline transition-all">
+        {status === "authenticated" && (
+          <>
+            <Link href="/dashboard" className="hover:underline transition-all">
+              Dashboard
+            </Link>
+            <Link href="/" className="hover:underline transition-all">
+              Analytics
+            </Link>
+          </>
+        )}
+        <Link href="/" className="hover:underline transition-all">
           Pricing
         </Link>
-        {session ? (
+        {status === "authenticated" ? (
           <>
-            <Link href="/profile" className="hover:underline transition-all">
+            <Link href="/" className="hover:underline transition-all">
               <User size={24} />
             </Link>
-            <button onClick={() => signOut()} className="hover:underline transition-all">
+            <button
+              onClick={handleSignOut}
+              className="hover:underline transition-all"
+            >
               <LogOut size={24} />
             </button>
           </>
@@ -73,11 +83,11 @@ const Navbar = () => {
       </button>
 
       {/* Mobile Menu */}
-      <div 
+      <div
         className={`
           fixed top-0 left-0 w-full h-screen bg-[#fdfcf8] 
           transform transition-transform duration-300 ease-in-out 
-          ${menuOpen ? 'translate-x-0' : 'translate-x-full'}
+          ${menuOpen ? "translate-x-0" : "translate-x-full"}
           sm:hidden flex flex-col justify-center items-center space-y-6 z-50 p-6
         `}
       >
@@ -95,40 +105,47 @@ const Navbar = () => {
             placeholder="Search..."
             className="w-full border border-gray-300 rounded-md pl-10 pr-4 py-3 text-lg placeholder-gray-500 focus:outline-none focus:border-[#4b9ec1] transition-colors"
           />
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={24} />
+          <Search
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+            size={24}
+          />
         </div>
 
-        <Link 
-          href="/dashboard" 
-          className="text-[#4b9ec1] text-2xl hover:underline transition-all"
-          onClick={closeMenu}
-        >
-          Dashboard
-        </Link>
-        <Link 
-          href="/analytics" 
-          className="text-[#4b9ec1] text-2xl hover:underline transition-all"
-          onClick={closeMenu}
-        >
-          Analytics
-        </Link>
-        <Link 
-          href="/pricing" 
+        {status === "authenticated" && (
+          <>
+            <Link
+              href="/dashboard"
+              className="text-[#4b9ec1] text-2xl hover:underline transition-all"
+              onClick={closeMenu}
+            >
+              Dashboard
+            </Link>
+            <Link
+              href="/"
+              className="text-[#4b9ec1] text-2xl hover:underline transition-all"
+              onClick={closeMenu}
+            >
+              Analytics
+            </Link>
+          </>
+        )}
+        <Link
+          href="/"
           className="text-[#4b9ec1] text-2xl hover:underline transition-all"
           onClick={closeMenu}
         >
           Pricing
         </Link>
-        {session ? (
+        {status === "authenticated" ? (
           <>
-            <Link 
-              href="/profile" 
+            <Link
+              href="/"
               className="text-[#4b9ec1] text-2xl hover:underline transition-all flex items-center"
               onClick={closeMenu}
             >
               <User size={24} className="mr-2" /> Profile
             </Link>
-            <button 
+            <button
               onClick={handleSignOut}
               className="text-[#4b9ec1] text-2xl hover:underline transition-all flex items-center"
             >
@@ -136,8 +153,8 @@ const Navbar = () => {
             </button>
           </>
         ) : (
-          <Link 
-            href="/login" 
+          <Link
+            href="/login"
             className="text-[#4b9ec1] text-2xl hover:underline transition-all"
             onClick={closeMenu}
           >
@@ -150,4 +167,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
