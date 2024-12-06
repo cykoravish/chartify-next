@@ -1,10 +1,16 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   env: {
-    MONGODB_URI: process.env.MONGODB_URI
-  }
+    MONGODB_URI: process.env.MONGODB_URI,
+  },
+  webpack: (config) => {
+    config.optimization = {
+      ...config.optimization,
+      minimize: false,
+    };
+    return config;
+  },
 };
 
 export default nextConfig;
