@@ -1,20 +1,25 @@
 import { DefaultSession, NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-// import { MongooseAdapter } from "@next-auth/mongoose-adapter";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
+import client from "./db";
 
-import dbConnect from "./mongoose";
+
 import { compare } from "bcrypt";
-import { User } from "./models/User";
+import { User } from "../models/User";
+import dbConnect from "./dbConnect";
 
 export const authOptions: NextAuthOptions = {
-  adapter: MongoDBAdapter(dbConnect),
+  adapter: MongoDBAdapter(client),
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "text", placeholder: "jsmith@example.com" },
-        password: { label: "Password", type: "password" }
+        email: {
+          label: "Email",
+          type: "text",
+          placeholder: "jsmith@example.com",
+        },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
@@ -28,7 +33,10 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        const isPasswordValid = await compare(credentials.password, user.password);
+        const isPasswordValid = await compare(
+          credentials.password,
+          user.password
+        );
 
         if (!isPasswordValid) {
           return null;
@@ -71,4 +79,3 @@ declare module "next-auth" {
     } & DefaultSession["user"];
   }
 }
-

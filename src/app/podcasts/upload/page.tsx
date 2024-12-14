@@ -1,15 +1,17 @@
 import { DashboardHeader } from '@/components/dashboard/header'
 import { DashboardShell } from '@/components/dashboard/shell'
-import { UploadPodcastForm } from '@/components/upload/upload-podcast-form'
+import { PodcastUpload } from '@/components/podcasts/podcast-upload'
 
-export default function UploadPage() {
+export default function UploadPodcastPage() {
   return (
     <DashboardShell>
       <DashboardHeader
         heading="Upload Podcast"
         text="Upload a new podcast episode to your channel."
       />
-      <UploadPodcastForm />
+      <div className="grid gap-8">
+        <PodcastUpload />
+      </div>
     </DashboardShell>
   )
 }
