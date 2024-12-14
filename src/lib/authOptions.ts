@@ -1,85 +1,44 @@
-import { NextAuthOptions } from "next-auth";
-import { Adapter } from "next-auth/adapters";
+import { DefaultSession, NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+// import { MongooseAdapter } from "@next-auth/mongoose-adapter";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
-import clientPromise from "@/lib/mongodb";
+
+import dbConnect from "./mongoose";
 import { compare } from "bcrypt";
-import { JWT } from "next-auth/jwt";
-import { Session, Account, Profile } from "next-auth";
-import { AdapterUser } from "next-auth/adapters";
-
-import { DefaultSession } from "next-auth";
-
-declare module "next-auth" {
-  interface Session {
-    user: {
-      id: string;
-    } & DefaultSession["user"];
-  }
-}
-
-interface User {
-  id: string;
-  email: string;
-  name: string;
-  emailVerified?: Date | null;
-}
-
-interface CustomJWT extends JWT {
-  id?: string;
-}
-
-interface CustomSession extends Session {
-  user: {
-    id: string;
-    email: string;
-    name: string;
-    image?: string | null;
-  };
-}
-
-const mongoAdapter = MongoDBAdapter(clientPromise) as Adapter;
+import { User } from "./models/User";
 
 export const authOptions: NextAuthOptions = {
-  adapter: mongoAdapter,
+  adapter: MongoDBAdapter(dbConnect),
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: {
-          label: "Email",
-          type: "text",
-          placeholder: "jsmith@example.com",
-        },
-        password: { label: "Password", type: "password" },
+        email: { label: "Email", type: "text", placeholder: "jsmith@example.com" },
+        password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
           return null;
         }
-        const client = await clientPromise;
-        const usersCollection = client
-          .db("podcast_analytics")
-          .collection("users");
-        const user = await usersCollection.findOne({
-          email: credentials.email,
-        });
+
+        await dbConnect();
+        const user = await User.findOne({ email: credentials.email });
+
         if (!user || !user.password) {
           return null;
         }
-        const isPasswordValid = await compare(
-          credentials.password,
-          user.password
-        );
+
+        const isPasswordValid = await compare(credentials.password, user.password);
+
         if (!isPasswordValid) {
           return null;
         }
+
         return {
           id: user._id.toString(),
           email: user.email,
           name: user.name,
-          emailVerified: null,
-        } as AdapterUser;
+        };
       },
     }),
   ],
@@ -97,14 +56,19 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token }) {
-      // Explicitly spread and add id
-      session.user = {
-        name: session.user?.name ?? undefined,
-        email: session.user?.email ?? undefined,
-        image: session.user?.image ?? undefined,
-        id: token.id as string,
-      };
+      if (session.user) {
+        session.user.id = token.id as string;
+      }
       return session;
     },
   },
 };
+
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+    } & DefaultSession["user"];
+  }
+}
+

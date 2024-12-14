@@ -1,34 +1,35 @@
-import { NextResponse } from 'next/server'
-import clientPromise from '@/lib/mongodb'
-import { hash } from 'bcrypt'
+import { NextRequest, NextResponse } from 'next/server';
+import dbConnect from '@/lib/mongoose';
+import { User } from '@/lib/models/User';
+import { hash } from 'bcrypt';
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
-    const { name, email, password } = await request.json()
-    const client = await clientPromise
-    const db = client.db("podcast_analytics")
+    const { name, email, password } = await request.json();
+    await dbConnect();
 
     // Check if user already exists
-    const existingUser = await db.collection("users").findOne({ email })
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return NextResponse.json({ error: "User already exists" }, { status: 400 })
+      return NextResponse.json({ error: "User already exists" }, { status: 400 });
     }
 
     // Hash the password
-    const hashedPassword = await hash(password, 10)
+    const hashedPassword = await hash(password, 10);
 
     // Create new user
-    const result = await db.collection("users").insertOne({
+    const user = new User({
       name,
       email,
       password: hashedPassword,
-      createdAt: new Date()
-    })
+    });
 
-    return NextResponse.json({ message: "User created successfully", userId: result.insertedId })
+    await user.save();
+
+    return NextResponse.json({ message: "User created successfully", userId: user._id });
   } catch (error) {
-    console.error(error)
-    return NextResponse.json({ error: "An error occurred while creating the user" }, { status: 500 })
+    console.error(error);
+    return NextResponse.json({ error: "An error occurred while creating the user" }, { status: 500 });
   }
 }
 

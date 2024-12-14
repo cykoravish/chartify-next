@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
-import clientPromise from "@/lib/mongodb";
+import clientPromise from "@/lib/mongoose";
 import { ObjectId } from "mongodb";
 
 export async function POST(request: Request) {

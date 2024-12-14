@@ -14,7 +14,7 @@ const HeroSection = () => {
     setError("");
     try {
       setLoading(true);
-      const response = await fetch("/api/register", {
+      const response = await fetch("/api/earlyuser", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
