@@ -1,0 +1,161 @@
+Flow of the Application
+
+    Public User Flow
+        Visitors land on the homepage where they can sign up for early access or log in.
+        Publicly available information includes features, testimonials, pricing, etc.
+        Users must log in to access detailed analytics.
+
+    Logged-In User Flow
+        After logging in, users are redirected to their dashboard.
+        From the dashboard, users can navigate to their podcasts, analytics, settings, and other features.
+        Users can upload podcast files, view growth metrics, and configure settings.
+
+Routes and Pages
+Public Routes
+
+    Home Page (/)
+        Features: Brief intro about your platform, key benefits, and CTAs.
+        Email Input Form: Users can sign up for early access.
+        Sections:
+            Features overview
+            Testimonials
+            Pricing
+
+    Login Page (/login)
+        Allow users to log in with email and password.
+        Option for "Forgot Password."
+
+    Sign-Up Page (/signup)
+        Form for user registration.
+
+    About Page (/about)
+        Information about your platform, its mission, and benefits for podcasters.
+
+    Contact Page (/contact)
+        Allow users to submit queries.
+
+Logged-In User Routes
+
+    Dashboard (/dashboard)
+        Overview of:
+            Total downloads.
+            Total plays.
+            Monthly growth (visualized via charts).
+            Top-performing episodes.
+        Quick links to specific podcasts or settings.
+
+    My Podcasts (/podcasts)
+        List of all podcasts uploaded by the user.
+        Actions:
+            Add a new podcast.
+            Delete/edit existing podcasts.
+
+    Podcast Details (/podcasts/[id])
+        Metrics for a specific podcast:
+            Downloads over time.
+            Plays over time.
+            User demographics (age, location, device).
+        Visualization:
+            Line charts, bar graphs, and pie charts.
+
+    Upload Podcast (/upload)
+        Form to upload new podcast episodes.
+        Metadata:
+            Title
+            Description
+            Tags
+            Upload audio file.
+
+    Analytics (/analytics)
+        Advanced metrics:
+            Listener retention.
+            Audience growth.
+            Comparison of episodes.
+        Filters:
+            Time range (last 7 days, 30 days, custom).
+            Location and demographics.
+
+    Profile and Settings (/settings)
+        Manage account settings:
+            Update email/password.
+            Configure notifications.
+            Billing info and subscription details.
+
+    Help and Support (/help)
+        FAQs, contact form, and resources.
+
+Admin Routes (Optional)
+
+    Admin Dashboard (/admin)
+        View total users.
+        Manage early bird registrations.
+        Analyze platform-wide usage.
+
+Navigation
+
+Navbar (Public):
+
+    Home
+    Features
+    About
+    Contact
+    Login/Sign-Up (CTA Button)
+
+Navbar (Logged In):
+
+    Dashboard
+    Podcasts
+    Upload
+    Analytics
+    Settings (Dropdown)
+    Logout (CTA Button)
+
+Footer:
+
+    Links to About, Contact, Terms, Privacy Policy, and social media.
+
+Dynamic Features
+
+    Interactive Charts and Graphs
+    Use libraries like Chart.js or recharts to display user metrics dynamically.
+
+    Responsive Design
+    Ensure the platform is mobile-friendly using Tailwind CSS or similar frameworks.
+
+    Search and Filter
+    Allow users to search for specific podcasts and filter metrics by various criteria.
+
+    API Integration
+    Integrate APIs to fetch podcast data (e.g., Spotify, Apple Podcasts).
+
+    Notifications System
+    Notify users about milestone achievements, platform updates, etc.
+
+Data Flow
+
+    Backend (Node.js/Express + Database)
+        Store user details, podcasts, and analytics data.
+        Endpoints for:
+            User authentication.
+            Podcast uploads.
+            Metrics retrieval.
+
+    Frontend (Next.js)
+        Fetch and display data via API.
+        Handle dynamic routing (e.g., /podcasts/[id]).
+
+Additional Suggestions
+
+    Gamification
+    Add milestones like "100 downloads achieved" to engage users.
+
+    Sharing Options
+    Enable users to share podcast performance on social media.
+
+    Early Access Incentives
+    Offer extra features or discounted pricing for early registrants.
+
+    Premium Tier
+    Introduce advanced analytics or additional storage as a paid feature.
+
+    => make intentinal loading for showcase at homepage

@@ -1,17 +1,17 @@
-"use client"
+"use client";
 import { Suspense, useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import { AuthProvider } from "@/components/AuthProvider";
 import "@/app/globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "next-themes";
+import LoadingPage from "@/components/LoadingPage";
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-
   const [mounted, setMounted] = useState(false);
 
   // Ensures the component only mounts on the client side
@@ -23,7 +23,7 @@ export default function RootLayout({
     return (
       <html lang="en">
         <body>
-          <div>Loading...</div>
+          <div><LoadingPage/></div>
         </body>
       </html>
     );
@@ -42,7 +42,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<LoadingPage />}>
               <Navbar />
             </Suspense>
             <main>{children}</main>
