@@ -39,7 +39,7 @@ const Navbar = () => {
     <motion.div variants={linkVariants}>
       <Link
         href={href}
-        className="text-[#4b9ec1] text-lg hover:underline transition-all flex items-center"
+        className="text-green-500 text-lg hover:underline transition-all flex items-center"
         onClick={onClick}
       >
         {children}
@@ -54,7 +54,7 @@ const Navbar = () => {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <Link href="/" className="text-black text-3xl font-cursive">
+        <Link href="/" className="text-green-500 text-3xl font-cursive">
           Chartify
         </Link>
       </motion.div>
@@ -63,13 +63,13 @@ const Navbar = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="hidden sm:flex items-center"
+        className="hidden lg:flex items-center"
       >
         <div className="relative">
           <input
             type="text"
             placeholder="Search..."
-            className="border border-gray-300 rounded-md pl-10 pr-4 py-2 text-sm placeholder-gray-500 focus:outline-none focus:border-[#4b9ec1] transition-colors"
+            className="border border-gray-300 rounded-md pl-10 pr-4 py-2 text-sm placeholder-gray-500 focus:outline-none focus:border-green-500 transition-colors"
           />
           <Search
             className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
@@ -82,7 +82,7 @@ const Navbar = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
-        className="hidden sm:flex space-x-6 text-[#4b9ec1] text-lg items-center"
+        className="hidden lg:flex space-x-6 text-green-500 text-lg items-center"
       >
         <NavLink href="/">
           <Home size={20} className="mr-2" /> Home
@@ -97,14 +97,14 @@ const Navbar = () => {
         {status === "authenticated" ? (
           <button
             onClick={handleSignOut}
-            className="text-[#4b9ec1] text-lg hover:underline transition-all flex items-center"
+            className="text-green-500 text-lg hover:underline transition-all flex items-center"
           >
             <LogOut size={20} className="mr-2" /> Logout
           </button>
         ) : (
           <button
             onClick={() => signIn()}
-            className="text-[#4b9ec1] text-lg hover:underline transition-all"
+            className="textgreen-500 text-lg hover:underline transition-all"
           >
             Login
           </button>
@@ -115,11 +115,11 @@ const Navbar = () => {
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="sm:hidden text-black text-3xl focus:outline-none z-60"
+        className="lg:hidden text-black text-3xl focus:outline-none z-60"
         onClick={() => setMenuOpen((prev) => !prev)}
         aria-label="Toggle menu"
       >
-        {menuOpen ? <X size={24} /> : <Menu size={24} />}
+        {menuOpen ? <X size={24} className="text-green-500" /> : <Menu size={24} className="text-green-500" />}
       </motion.button>
 
       <AnimatePresence>
@@ -130,17 +130,17 @@ const Navbar = () => {
             exit="closed"
             variants={menuVariants}
             className="fixed top-0 right-0 w-full h-screen bg-[#fdfcf8] 
-              sm:hidden flex flex-col justify-center items-center space-y-6 z-50 p-6"
+              lg:hidden flex flex-col justify-center items-center space-y-6 z-50 p-6"
           >
             <motion.button
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="absolute top-6 right-6 text-3xl text-[#4b9ec1] focus:outline-none"
+              className="absolute top-6 right-6 text-3xl text-green-500 focus:outline-none"
               onClick={closeMenu}
             >
-              <X size={24} />
+              <X size={24} className="text-green-500" />
             </motion.button>
 
             <motion.div
@@ -150,7 +150,7 @@ const Navbar = () => {
               <input
                 type="text"
                 placeholder="Search..."
-                className="w-full border border-gray-300 rounded-md pl-10 pr-4 py-3 text-lg placeholder-gray-500 focus:outline-none focus:border-[#4b9ec1] transition-colors"
+                className="w-full border border-gray-300 rounded-md pl-10 pr-4 py-3 text-lg placeholder-gray-500 focus:outline-none focus:border-green-500 transition-colors"
               />
               <Search
                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
@@ -172,7 +172,7 @@ const Navbar = () => {
               <motion.div variants={linkVariants}>
                 <button
                   onClick={handleSignOut}
-                  className="text-[#4b9ec1] text-2xl hover:underline transition-all flex items-center"
+                  className="text-green-500 text-2xl hover:underline transition-all flex items-center"
                 >
                   <LogOut size={24} className="mr-2" /> Logout
                 </button>
@@ -181,7 +181,7 @@ const Navbar = () => {
               <motion.div variants={linkVariants}>
                 <button
                   onClick={() => signIn()}
-                  className="text-[#4b9ec1] text-2xl hover:underline transition-all"
+                  className="text-green-500 text-2xl hover:underline transition-all"
                 >
                   Login
                 </button>

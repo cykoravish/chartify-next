@@ -72,7 +72,7 @@ export function JoinWaitingList({ setSubmitted }) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
-          className="bg-[#75d156] text-white px-6 py-3 rounded-md shadow-md hover:bg-[#81eb5d] font-semibold text-sm sm:text-base whitespace-nowrap"
+          className="bg-green-600 text-white px-6 py-3 rounded-md shadow-md hover:bg-green-500 font-semibold text-sm sm:text-base whitespace-nowrap"
           //   type="submit"
           disabled={loading}
         >
@@ -85,10 +85,10 @@ export function JoinWaitingList({ setSubmitted }) {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="text-[#75d156] text-lg">
+          <DialogTitle className="text-green-600 text-lg">
             Join the waiting list
           </DialogTitle>
-          <DialogDescription className="text-sm">
+          <DialogDescription className="text-sm text-gray-800">
             Please provide your name and email so that we can notify you about
             the updates.
           </DialogDescription>
@@ -98,7 +98,7 @@ export function JoinWaitingList({ setSubmitted }) {
             <div className="grid grid-cols-4 items-center gap-4">
               <Label
                 htmlFor="title"
-                className="text-right text-[#75d156] font-semibold"
+                className="text-right text-gray-900 font-semibold"
               >
                 Name
               </Label>
@@ -114,7 +114,7 @@ export function JoinWaitingList({ setSubmitted }) {
             <div className="grid grid-cols-4 items-center gap-4">
               <Label
                 htmlFor="description"
-                className="text-right text-[#75d156] font-semibold"
+                className="text-right text-gray-900 font-semibold"
               >
                 Email
               </Label>
@@ -133,7 +133,7 @@ export function JoinWaitingList({ setSubmitted }) {
           <DialogFooter>
             <Button
               type="submit"
-              className="bg-[#75d156] text-white px-6 py-4 rounded-md shadow-md hover:bg-[#81eb5d] font-semibold text-sm sm:text-base whitespace-nowrap"
+              className="bg-green-600 text-white px-6 py-4 rounded-md shadow-md hover:bg-green-500 text-sm sm:text-base whitespace-nowrap"
               disabled={loading}
             >
               {loading ? <LoaderCircle className="animate-spin" /> : "Submit"}
