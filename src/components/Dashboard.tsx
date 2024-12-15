@@ -56,15 +56,15 @@ export function Dashboard() {
     return <div>Loading analytics...</div>
   }
 
-  const totalDownloads = podcasts.reduce((sum, podcast) => sum + podcast.analytics.totalDownloads, 0)
-  const totalPlays = podcasts.reduce((sum, podcast) => sum + podcast.analytics.totalPlays, 0)
+  const totalDownloads = podcasts.reduce((sum, podcast) => sum + podcast.analytics?.totalDownloads, 0)
+  const totalPlays = podcasts.reduce((sum, podcast) => sum + podcast.analytics?.totalPlays, 0)
 
   const downloadData = {
     labels: podcasts.map(podcast => podcast.title),
     datasets: [
       {
         label: 'Downloads',
-        data: podcasts.map(podcast => podcast.analytics.totalDownloads),
+        data: podcasts.map(podcast => podcast.analytics?.totalDownloads),
         borderColor: 'rgb(75, 192, 192)',
         tension: 0.1
       }
@@ -76,7 +76,7 @@ export function Dashboard() {
     datasets: [
       {
         label: 'Plays',
-        data: podcasts.map(podcast => podcast.analytics.totalPlays),
+        data: podcasts.map(podcast => podcast.analytics?.totalPlays),
         backgroundColor: 'rgba(53, 162, 235, 0.5)',
       }
     ]
@@ -87,11 +87,11 @@ export function Dashboard() {
     datasets: [
       {
         data: [
-          podcasts.reduce((sum, podcast) => sum + podcast.analytics.listenerDemographics.age['18-24'], 0),
-          podcasts.reduce((sum, podcast) => sum + podcast.analytics.listenerDemographics.age['25-34'], 0),
-          podcasts.reduce((sum, podcast) => sum + podcast.analytics.listenerDemographics.age['35-44'], 0),
-          podcasts.reduce((sum, podcast) => sum + podcast.analytics.listenerDemographics.age['45-54'], 0),
-          podcasts.reduce((sum, podcast) => sum + podcast.analytics.listenerDemographics.age['55+'], 0),
+          podcasts.reduce((sum, podcast) => sum + podcast.analytics?.listenerDemographics.age['18-24'], 0),
+          podcasts.reduce((sum, podcast) => sum + podcast.analytics?.listenerDemographics.age['25-34'], 0),
+          podcasts.reduce((sum, podcast) => sum + podcast.analytics?.listenerDemographics.age['35-44'], 0),
+          podcasts.reduce((sum, podcast) => sum + podcast.analytics?.listenerDemographics.age['45-54'], 0),
+          podcasts.reduce((sum, podcast) => sum + podcast.analytics?.listenerDemographics.age['55+'], 0),
         ],
         backgroundColor: [
           'rgba(255, 99, 132, 0.5)',
