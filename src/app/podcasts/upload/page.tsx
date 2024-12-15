@@ -4,15 +4,21 @@ import { PodcastUpload } from '@/components/podcasts/podcast-upload'
 
 export default function UploadPodcastPage() {
   return (
+    <div className='px-2 py-8'>
     <DashboardShell>
+      <div className='ml-4'>
       <DashboardHeader
         heading="Upload Podcast"
         text="Upload a new podcast episode to your channel."
       />
-      <div className="grid gap-8">
+
+      </div>
+      <div className="py-5">
         <PodcastUpload />
       </div>
     </DashboardShell>
+
+    </div>
   )
 }
 

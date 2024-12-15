@@ -10,6 +10,10 @@ export const getRandomImage = () => {
 // Define the schema
 const earlyUserSchema = new mongoose.Schema(
   {
+    name: {
+      type: String,
+      required: true,
+    },
     email: {
       type: String,
       required: true,

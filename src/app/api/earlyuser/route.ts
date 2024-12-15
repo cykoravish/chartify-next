@@ -1,12 +1,12 @@
-import dbConnect from "@/lib/db";
+
 import { NextRequest, NextResponse } from "next/server";
 import EarlyUser from "@/lib/EarlyUserModel";
+import dbConnect from "@/lib/dbConnect";
 
 export async function POST(req: NextRequest, res: NextResponse) {
   await dbConnect();
   try {
-    const { email } = await req.json();
-    console.log(email);
+    const { name, email } = await req.json();
 
     const existingUser = await EarlyUser.findOne({ email });
     if (existingUser) {
@@ -15,7 +15,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         { status: 400 }
       );
     }
-    const result = await EarlyUser.create({ email });
+    const result = await EarlyUser.create({ name, email });
 
     return NextResponse.json(
       {

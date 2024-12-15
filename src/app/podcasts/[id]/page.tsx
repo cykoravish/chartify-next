@@ -10,6 +10,7 @@ export default function PodcastDetailsPage({
   params: { id: string };
 }) {
   return (
+    <div className="px-4">
     <DashboardShell>
       <DashboardHeader
         heading="Podcast Details"
@@ -19,5 +20,7 @@ export default function PodcastDetailsPage({
         <PodcastDetails id={params.id} />
       </Suspense>
     </DashboardShell>
+
+    </div>
   );
 }

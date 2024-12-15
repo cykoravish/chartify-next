@@ -6,6 +6,7 @@ import "@/app/globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "next-themes";
 import LoadingPage from "@/components/LoadingPage";
+import { Toaster as Tos } from "react-hot-toast";
 
 export default function RootLayout({
   children,
@@ -23,7 +24,9 @@ export default function RootLayout({
     return (
       <html lang="en">
         <body>
-          <div><LoadingPage/></div>
+          <div>
+            <LoadingPage />
+          </div>
         </body>
       </html>
     );
@@ -34,7 +37,7 @@ export default function RootLayout({
       <head>
         <title>Chartify - Alternative to chartable</title>
       </head>
-      <body>
+      <body className="font-serif">
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
@@ -46,6 +49,7 @@ export default function RootLayout({
               <Navbar />
             </Suspense>
             <main>{children}</main>
+            <Tos />
             <Toaster />
           </AuthProvider>
         </ThemeProvider>

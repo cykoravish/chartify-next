@@ -1,39 +1,11 @@
 "use client";
-import { useState } from "react";
+
 import VideoPlayer from "./VideoComponent";
-import { LoaderCircle } from "lucide-react";
+import { JoinWaitingList } from "./Join-waiting-list-btn";
+import { useState } from "react";
 
 const HeroSection = () => {
-  const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError("");
-    try {
-      setLoading(true);
-      const response = await fetch("/api/earlyuser", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Registration failed");
-      }
-
-      setSubmitted(true);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <section className="bg-[#fdfcf8] py-8 px-4 sm:py-12 md:py-16 lg:py-20 lg:px-8">
@@ -53,38 +25,10 @@ const HeroSection = () => {
             </p>
 
             {!submitted ? (
-              <form
-                onSubmit={handleSubmit}
-                className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto lg:mx-0"
-              >
-                <input
-                  type="email"
-                  placeholder="Enter your email for early access"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="flex-grow px-4 py-3 border border-gray-300 rounded-md focus:outline-none placeholder:text-sm focus:border-[#4b9ec1] text-sm sm:text-base"
-                />
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="bg-[#75d156] text-white px-6 py-3 rounded-md shadow-md hover:bg-[#81eb5d] font-semibold text-sm sm:text-base whitespace-nowrap"
-                >
-                  {loading ? (
-                    <LoaderCircle className="animate-spin" />
-                  ) : (
-                    "Get Early Access"
-                  )}
-                </button>
-              </form>
+              <JoinWaitingList setSubmitted={setSubmitted} />
             ) : (
               <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-md max-w-md mx-auto lg:mx-0">
-                Thank you! We&apos;ll keep you updated on our launch.
-              </div>
-            )}
-            {error && (
-              <div className="mt-4 text-red-600 max-w-md mx-auto lg:mx-0">
-                {error}
+                Thank you! you&apos;r added in the waiting list and we&apos;ll give you updates.
               </div>
             )}
           </div>

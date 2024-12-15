@@ -79,7 +79,7 @@ export async function GET(req: Request) {
     const podcasts = await Podcast.find({ user: user._id }).populate(
       "analytics"
     );
-
+    console.log("podcasts: ", podcasts)
     return NextResponse.json(podcasts);
   } catch (error) {
     console.error("Error fetching podcasts:", error);
