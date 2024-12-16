@@ -25,10 +25,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Loader2, Upload } from "lucide-react";
 
 // Option 1: Disable caching for the specific route
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 // Option 2: For API routes, explicitly disable caching
-export const revalidate = 0
+export const revalidate = 0;
 
 const formSchema = z.object({
   title: z
@@ -105,21 +105,21 @@ export function PodcastUpload() {
     formData.append("title", values.title);
     formData.append("description", values.description);
     formData.append("tags", values.tags);
-
+    console.log("formDATA: ", formData);
     try {
       setIsLoading(true);
       setUploadProgress(0);
 
       // Start simulated progress
       const progressInterval = simulateProgress();
-
+      console.log("response test 1:", progressInterval);
       const response = await fetch("/api/podcasts", {
         method: "POST",
         body: formData,
-        cache: 'no-store', 
-        next: { revalidate: 0 } 
+        cache: "no-store",
+        next: { revalidate: 0 },
       });
-
+      console.log("response test 2:", response);
       clearInterval(progressInterval);
 
       if (!response.ok) {
