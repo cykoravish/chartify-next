@@ -2,7 +2,11 @@ export const config = {
   api: {
     responseLimit: false,
   },
+  bodyParser: {
+    sizeLimit: "100mb", // Set the desired size limit (adjust as necessary)
+  },
 };
+
 // Option 1: Disable caching for the specific route
 export const dynamic = "force-dynamic";
 
@@ -25,7 +29,7 @@ cloudinary.config({
 });
 
 export async function POST(req: Request) {
-  console.log("api hit post POST")
+  console.log("api hit post POST");
   const session = await getServerSession(authOptions);
   console.log("POST 1. session: ", session);
   if (!session) {
