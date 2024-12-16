@@ -30,7 +30,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 console.log("cloudinary 2")
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   console.log("api hit post POST");
   const session = await getServerSession(authOptions);
   console.log("POST 1. session: ", session);
