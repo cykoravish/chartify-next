@@ -1,3 +1,10 @@
+
+// Option 1: Disable caching for the specific route
+export const dynamic = 'force-dynamic'
+
+// Option 2: For API routes, explicitly disable caching
+export const revalidate = 0
+
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/authOptions";

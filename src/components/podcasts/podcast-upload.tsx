@@ -24,6 +24,12 @@ import { useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Loader2, Upload } from "lucide-react";
 
+// Option 1: Disable caching for the specific route
+export const dynamic = 'force-dynamic'
+
+// Option 2: For API routes, explicitly disable caching
+export const revalidate = 0
+
 const formSchema = z.object({
   title: z
     .string()
@@ -110,6 +116,8 @@ export function PodcastUpload() {
       const response = await fetch("/api/podcasts", {
         method: "POST",
         body: formData,
+        cache: 'no-store', 
+        next: { revalidate: 0 } 
       });
 
       clearInterval(progressInterval);
