@@ -55,7 +55,7 @@ const PodcastSchema = new mongoose.Schema({
   analytics: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Analytics',
-    required:true,
+    // required:true,
   },
 }, { timestamps: true });
 
