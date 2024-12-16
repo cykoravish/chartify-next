@@ -17,38 +17,38 @@ export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   await dbConnect();
 
   try {
     const formData = await req.formData();
-    const file = formData.get('file') as File;
-    const title = formData.get('title') as string;
-    const description = formData.get('description') as string;
-    const tags = formData.get('tags') as string;
+    const file = formData.get("file") as File;
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
+    const tags = formData.get("tags") as string;
 
     if (!file) {
-      return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
+      return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
     }
 
     const buffer = await file.arrayBuffer();
-    const base64File = Buffer.from(buffer).toString('base64');
+    const base64File = Buffer.from(buffer).toString("base64");
     const dataURI = `data:${file.type};base64,${base64File}`;
 
     const uploadResponse = await cloudinary.uploader.upload(dataURI, {
-      resource_type: 'auto',
-      folder: 'podcasts',
+      resource_type: "auto",
+      folder: "podcasts",
     });
 
     const user = await User.findOne({ email: session.user.email });
-
+    console.log("user:", user);
     // Create the podcast first
     const podcast = new Podcast({
       title,
       description,
-      tags: tags.split(',').map(tag => tag.trim()),
+      tags: tags.split(",").map((tag) => tag.trim()),
       fileUrl: uploadResponse.secure_url,
       fileId: uploadResponse.public_id,
       user: user._id,
@@ -63,11 +63,11 @@ export async function POST(req: Request) {
       totalPlays: 0,
       listenerDemographics: {
         age: {
-          '18-24': 0,
-          '25-34': 0,
-          '35-44': 0,
-          '45-54': 0,
-          '55+': 0,
+          "18-24": 0,
+          "25-34": 0,
+          "35-44": 0,
+          "45-54": 0,
+          "55+": 0,
         },
         gender: {
           male: 0,
@@ -75,13 +75,13 @@ export async function POST(req: Request) {
           other: 0,
         },
       },
-      geographicalData: [{ country: 'Unknown', count: 0 }],
+      geographicalData: [{ country: "Unknown", count: 0 }],
       listeningDuration: {
         total: 0,
         average: 0,
       },
-      deviceInfo: [{ device: 'Unknown', count: 0 }],
-      platformInfo: [{ platform: 'Unknown', count: 0 }],
+      deviceInfo: [{ device: "Unknown", count: 0 }],
+      platformInfo: [{ platform: "Unknown", count: 0 }],
     });
 
     await defaultAnalytics.save();
@@ -95,8 +95,11 @@ export async function POST(req: Request) {
 
     return NextResponse.json(podcast);
   } catch (error) {
-    console.error('Error creating podcast:', error);
-    return NextResponse.json({ error: 'Error creating podcast' }, { status: 500 });
+    console.error("Error creating podcast:", error);
+    return NextResponse.json(
+      { error: "Error creating podcast" },
+      { status: 500 }
+    );
   }
 }
 
@@ -111,7 +114,7 @@ export async function GET(req: Request) {
 
   try {
     const user = await User.findOne({ email: session.user.email });
-    console.log("user: ", user)
+    console.log("user: ", user);
     const podcasts = await Podcast.find({ user: user._id }).populate(
       "analytics"
     );
@@ -125,4 +128,3 @@ export async function GET(req: Request) {
     );
   }
 }
-
