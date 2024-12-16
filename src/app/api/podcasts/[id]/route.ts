@@ -23,7 +23,7 @@ export async function GET(req: NextRequest, props: { params: Promise<{ id: strin
     if (!podcast) {
       return NextResponse.json({ error: "Podcast not found" }, { status: 404 });
     }
-    console.log("populated user podcast: ", podcast);
+    // console.log("populated user podcast: ", podcast);
     return NextResponse.json(podcast);
   } catch (error) {
     console.error("Error fetching podcast:", error);
