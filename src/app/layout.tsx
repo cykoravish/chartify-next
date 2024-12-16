@@ -37,7 +37,7 @@ export default function RootLayout({
       <head>
         <title>Chartify - Alternative to chartable</title>
       </head>
-      <body className="font-serif">
+      <body className="font-serif bg-gradient-to-br from-purple-50 to-green-100">
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

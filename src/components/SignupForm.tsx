@@ -7,8 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, User, Mail, Lock } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
+import toast from "react-hot-toast";
 
 export function SignupForm() {
   const [name, setName] = useState("");
@@ -17,7 +17,6 @@ export function SignupForm() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,24 +31,26 @@ export function SignupForm() {
 
       if (response.ok) {
         router.push("/login");
-        toast({
-          description: "Account created successfully! Please log in.",
+        toast.success("Account created successfully! Please log in.",{
+          style: {
+            border: '1px solid #008000',
+            padding: '16px',
+            color: '#008000',
+          },
+          iconTheme: {
+            primary: '#008000',
+            secondary: '#FFFAEE',
+          },
         });
       } else {
         const data = await response.json();
         setError(data.error || "An error occurred during signup.");
-        toast({
-          variant: "destructive",
-          description: data.error || "An error occurred during signup.",
-        });
+        toast.error(data.error || "An error occurred during signup.");
       }
     } catch (error) {
       console.error("An error occurred during signup:", error);
       setError("An error occurred during signup. Please try again.");
-      toast({
-        variant: "destructive",
-        description: "An error occurred during signup. Please try again.",
-      });
+      toast.error("An error occurred during signup. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -82,7 +83,7 @@ export function SignupForm() {
               name="name"
               type="text"
               required
-              className="appearance-none rounded-t-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-white bg-black bg-opacity-50 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 sm:text-sm pl-10"
+              className="appearance-none rounded-t-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-white bg-black bg-opacity-50 focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm pl-10"
               placeholder="Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -108,7 +109,7 @@ export function SignupForm() {
               type="email"
               autoComplete="email"
               required
-              className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-white bg-black bg-opacity-50 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 sm:text-sm pl-10"
+              className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-white bg-black bg-opacity-50 focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm pl-10"
               placeholder="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -134,7 +135,7 @@ export function SignupForm() {
               type="password"
               autoComplete="new-password"
               required
-              className="appearance-none rounded-b-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-white bg-black bg-opacity-50 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 sm:text-sm pl-10"
+              className="appearance-none rounded-b-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-white bg-black bg-opacity-50 focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm pl-10"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -164,7 +165,7 @@ export function SignupForm() {
       >
         <Button
           type="submit"
-          className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-colors duration-300"
+          className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-300"
           disabled={isLoading}
         >
           {isLoading ? (

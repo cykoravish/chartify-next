@@ -7,7 +7,7 @@ import Image from "next/image";
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-700 to-indigo-900 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-700 to-green-900 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       <div className="absolute inset-0 z-0">
         <Image
           src="/podback.jpg"
@@ -52,10 +52,10 @@ export default function LoginPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6, duration: 0.5 }}
-          className="text-white text-center"
+          className="text-gray-300 text-center"
         >
           Don&apos;t have an account?{" "}
-          <Link href="/signup" className="text-yellow-300 font-semibold hover:text-yellow-100 transition-colors">
+          <Link href="/signup" className="text-white underline font-semibold hover:text-yellow-500 transition-colors">
             Sign Up
           </Link>
         </motion.h2>

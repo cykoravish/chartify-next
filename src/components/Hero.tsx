@@ -8,7 +8,7 @@ const HeroSection = () => {
   const [submitted, setSubmitted] = useState(false);
 
   return (
-    <section className="bg-[#fdfcf8] py-8 px-4 sm:py-12 md:py-16 lg:py-20 lg:px-8">
+    <section className="py-8 px-4 sm:py-12 md:py-16 lg:py-20 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12">
           {/* Left Content */}

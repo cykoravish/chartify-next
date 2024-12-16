@@ -90,10 +90,11 @@ const Navbar = () => {
         {status === "authenticated" && (
           <>
             <NavLink href="/dashboard">Dashboard</NavLink>
-            <NavLink href="/analytics">Analytics</NavLink>
+            <NavLink href="/podcasts">Podcasts</NavLink>          
           </>
         )}
         <NavLink href="/pricing">Pricing</NavLink>
+        <NavLink href="/about">About</NavLink>
         {status === "authenticated" ? (
           <button
             onClick={handleSignOut}
@@ -164,7 +165,7 @@ const Navbar = () => {
             {status === "authenticated" && (
               <>
                 <NavLink href="/dashboard" onClick={closeMenu}>Dashboard</NavLink>
-                <NavLink href="/analytics" onClick={closeMenu}>Analytics</NavLink>
+                {/* <NavLink href="/analytics" onClick={closeMenu}>Analytics</NavLink> */}
               </>
             )}
             <NavLink href="/pricing" onClick={closeMenu}>Pricing</NavLink>

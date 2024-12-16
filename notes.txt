@@ -159,3 +159,9 @@ Additional Suggestions
     Introduce advanced analytics or additional storage as a paid feature.
 
     => make intentinal loading for showcase at homepage
+    =>improve toast on login signup
+    => way to share podcast
+    =>real time analytics and share the podcast
+    =>NaN comming on dashboard downloads fix it
+    => navbar routes fix for public and rprivat and middle watre add
+    => while uploading podcase it must show upload percentafe

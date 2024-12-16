@@ -36,6 +36,8 @@ export function JoinWaitingList({ setSubmitted }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ name, email }),
+        cache: "no-store",
+        next: { revalidate: 0 },
       });
 
       if (!response.ok) {
@@ -51,18 +53,18 @@ export function JoinWaitingList({ setSubmitted }) {
       setOpen(false);
       toast.success("Successfully joined the waiting list!", {
         style: {
-          border: "1px solid #713200",
+          border: "1px solid #008000",
           padding: "16px",
-          color: "#713200",
+          color: "##008000",
         },
         iconTheme: {
-          primary: "#713200",
+          primary: "##008000",
           secondary: "#FFFAEE",
         },
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
-      toast.error("can't join waiting list. sorry for inconven");
+      toast.error(err.message || "can't join waiting list. sorry for inconven");
     } finally {
       setLoading(false);
     }

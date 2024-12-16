@@ -9,7 +9,7 @@ export default function UploadPodcastPage() {
       <div className='ml-4'>
       <DashboardHeader
         heading="Upload Podcast"
-        text="Upload a new podcast episode to your channel."
+        text="Upload a new podcast episode to your channel. The upload file must be a .mp3 or .wav file"
       />
 
       </div>

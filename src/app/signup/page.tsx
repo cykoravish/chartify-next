@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { SignupForm } from "@/components/SignupForm";
 import Link from "next/link";
@@ -7,7 +7,7 @@ import Image from "next/image";
 
 export default function SignupPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-700 to-indigo-900 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-700 to-green-900 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       <div className="absolute inset-0 z-0">
         <Image
           src="/podback.jpg"
@@ -35,7 +35,12 @@ export default function SignupPage() {
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            transition={{ delay: 0.4, type: "spring", stiffness: 260, damping: 20 }}
+            transition={{
+              delay: 0.4,
+              type: "spring",
+              stiffness: 260,
+              damping: 20,
+            }}
             className="mt-4 flex justify-center"
           >
             <Image
@@ -52,10 +57,13 @@ export default function SignupPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6, duration: 0.5 }}
-          className="text-white text-center"
+          className="text-gray-300 text-center"
         >
           Already have an account?{" "}
-          <Link href="/login" className="text-yellow-300 font-semibold hover:text-yellow-100 transition-colors">
+          <Link
+            href="/login"
+            className="text-white underline  font-semibold hover:text-yellow-500 transition-colors"
+          >
             Log In
           </Link>
         </motion.h2>
@@ -63,4 +71,3 @@ export default function SignupPage() {
     </div>
   );
 }
-
