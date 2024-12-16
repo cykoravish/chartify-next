@@ -1,6 +1,6 @@
 export const config = {
   api: {
-    responseLimit: "100mb",
+    responseLimit: false,
   },
 };
 // Option 1: Disable caching for the specific route
