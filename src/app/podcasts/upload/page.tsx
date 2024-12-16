@@ -2,6 +2,11 @@ import { DashboardHeader } from '@/components/dashboard/header'
 import { DashboardShell } from '@/components/dashboard/shell'
 import { PodcastUpload } from '@/components/podcasts/podcast-upload'
 
+export const config = {
+  api: {
+    responseLimit: false,
+  },
+}
 export default function UploadPodcastPage() {
   return (
     <div className='px-2 py-8'>
