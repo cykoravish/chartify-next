@@ -9,6 +9,7 @@ import { DashboardCards } from "@/components/dashboard/cards";
 import { TopEpisodes } from "@/components/dashboard/top-episodes";
 import Link from "next/link";
 import { Upload } from "lucide-react";
+import Footer from "@/components/Footer";
 
 export default function DashboardPage() {
   return (
@@ -20,8 +21,8 @@ export default function DashboardPage() {
         >
           <Link href="/podcasts/upload">
             <button className="bg-green-600 py-2 px-3 rounded-lg text-white hover:bg-green-500 font-medium">
-            <Upload className="w-5 h-5 inline mr-2" />
-            Upload Podcast
+              <Upload className="w-5 h-5 inline mr-2" />
+              Upload Podcast
             </button>
           </Link>
         </DashboardHeader>
@@ -34,6 +35,7 @@ export default function DashboardPage() {
           </Suspense>
         </div>
       </DashboardShell>
+      <Footer />
     </div>
   );
 }

@@ -93,7 +93,7 @@ export default function PaymentModal({ isOpen, onClose, selectedTier }: PaymentM
             <X size={24} />
           </button>
         </div>
-        <p className="mb-6">You're purchasing the <strong>{selectedTier.name}</strong> plan for <strong>{selectedTier.price}/month</strong></p>
+        <p className="mb-6">You&apos;re purchasing the <strong>{selectedTier.name}</strong> plan for <strong>{selectedTier.price}/month</strong></p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <Label htmlFor="name">Cardholder Name</Label>

@@ -18,7 +18,7 @@ export async function GET(req: NextRequest, props: { params: Promise<{ id: strin
   await dbConnect();
 
   try {
-    const podcast = await Podcast.findById(podcastId).populate("user");
+    const podcast = await Podcast.findById(podcastId).populate("user").populate("analytics");
 
     if (!podcast) {
       return NextResponse.json({ error: "Podcast not found" }, { status: 404 });

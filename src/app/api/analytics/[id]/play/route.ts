@@ -9,8 +9,12 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     const analytics = await Analytics.findOneAndUpdate(
       { podcast: params.id },
       { $inc: { totalPlays: 1 } },
-      { new: true, upsert: true }
+      { new: true }
     );
+
+    if (!analytics) {
+      return NextResponse.json({ error: "Analytics not found" }, { status: 404 });
+    }
 
     return NextResponse.json(analytics);
   } catch (error) {

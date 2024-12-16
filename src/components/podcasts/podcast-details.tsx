@@ -6,13 +6,37 @@ import { useSession } from "next-auth/react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Share2, Play, Pause, Clock, Tag, User } from 'lucide-react';
+import {
+  Share2,
+  Play,
+  Pause,
+  Download,
+  BarChart2,
+  Users,
+  Globe,
+} from "lucide-react";
 import { toast } from "@/hooks/use-toast";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement } from 'chart.js';
-import { Pie, Bar } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+} from "chart.js";
+import { Pie, Bar } from "react-chartjs-2";
+import { useAnalytics } from "@/hooks/use-analytics";
 import { PodcastDetailsSkeleton } from "./podcast-details-skeleton";
 
-ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement);
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement
+);
 
 interface PodcastDetailsProps {
   id: string;
@@ -31,24 +55,20 @@ interface Podcast {
     email: string;
     image: string;
   };
-  analytics: {
-    listens: number;
-    shares: number;
-  };
+  analytics: Analytics;
   createdAt: string;
 }
-
 
 interface Analytics {
   totalDownloads: number;
   totalPlays: number;
   listenerDemographics: {
     age: {
-      '18-24': number;
-      '25-34': number;
-      '35-44': number;
-      '45-54': number;
-      '55+': number;
+      "18-24": number;
+      "25-34": number;
+      "35-44": number;
+      "45-54": number;
+      "55+": number;
     };
     gender: {
       male: number;
@@ -65,77 +85,39 @@ interface Analytics {
   platformInfo: Array<{ platform: string; count: number }>;
 }
 
-
 export function PodcastDetails({ id }: PodcastDetailsProps) {
   const [podcast, setPodcast] = useState<Podcast | null>(null);
-  const [analytics, setAnalytics] = useState<Analytics | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState<number | null>(null);
   const { data: session } = useSession();
   const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  // useEffect(() => {
-  //   const fetchPodcast = async () => {
-  //     try {
-  //       const response = await fetch(`/api/podcasts/${id}`);
-  //       if (!response.ok) {
-  //         throw new Error("Failed to fetch podcast");
-  //       }
-  //       const data = await response.json();
-  //       setPodcast(data);
-
-  //       // Create audio element to get duration
-  //       const audio = new Audio(data.fileUrl);
-  //       audio.addEventListener('loadedmetadata', () => {
-  //         setDuration(Math.round(audio.duration));
-  //       });
-  //     } catch (error) {
-  //       console.error("Error fetching podcast:", error);
-  //       toast({
-  //         title: "Error",
-  //         description: "Failed to fetch podcast details.",
-  //         variant: "destructive",
-  //       });
-  //     }
-  //   };
-
-  //   fetchPodcast();
-  // }, [id]);
+  const { updateAnalytics } = useAnalytics(id);
 
   useEffect(() => {
-    const fetchPodcastAndAnalytics = async () => {
+    const fetchPodcast = async () => {
       try {
-        const [podcastResponse, analyticsResponse] = await Promise.all([
-          fetch(`/api/podcasts/${id}`),
-          fetch(`/api/analytics/${id}`)
-        ]);
-
-        if (!podcastResponse.ok || !analyticsResponse.ok) {
-          throw new Error("Failed to fetch podcast or analytics");
+        const response = await fetch(`/api/podcasts/${id}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch podcast");
         }
+        const data = await response.json();
+        setPodcast(data);
 
-        const podcastData = await podcastResponse.json();
-        const analyticsData = await analyticsResponse.json();
-
-        setPodcast(podcastData);
-        setAnalytics(analyticsData);
-
-        // Create audio element to get duration
-        const audio = new Audio(podcastData.fileUrl);
-        audio.addEventListener('loadedmetadata', () => {
+        const audio = new Audio(data.fileUrl);
+        audio.addEventListener("loadedmetadata", () => {
           setDuration(Math.round(audio.duration));
         });
       } catch (error) {
-        console.error("Error fetching podcast or analytics:", error);
+        console.error("Error fetching podcast:", error);
         toast({
           title: "Error",
-          description: "Failed to fetch podcast details or analytics.",
+          description: "Failed to fetch podcast details.",
           variant: "destructive",
         });
       }
     };
 
-    fetchPodcastAndAnalytics();
+    fetchPodcast();
   }, [id]);
 
   useEffect(() => {
@@ -144,48 +126,41 @@ export function PodcastDetails({ id }: PodcastDetailsProps) {
     }
   }, [podcast]);
 
-  const togglePlayPause = () => {
+  const togglePlayPause = async () => {
     if (audioRef.current) {
       if (isPlaying) {
         audioRef.current.pause();
       } else {
         audioRef.current.play();
+        await updateAnalytics("play");
       }
       setIsPlaying(!isPlaying);
     }
   };
 
-  const handlePlay = async () => {
-    togglePlayPause();
-    // Record play event
-    await fetch(`/api/analytics/${id}/play`, { method: 'POST' });
-  };
-
   const handleDownload = async () => {
-    // Record download event
-    await fetch(`/api/analytics/${id}/download`, { method: 'POST' });
-    // Trigger download
-    window.open(podcast?.fileUrl, '_blank');
+    if (podcast) {
+      await updateAnalytics("download");
+      window.open(podcast.fileUrl, "_blank");
+    }
   };
 
   const handleShare = async () => {
     if (podcast) {
-      const shareUrl = `${window.location.origin}/podcasts/${podcast._id}`;
+      const shareUrl = `${window.location.origin}/podcast/${podcast._id}`;
       try {
         await navigator.share({
           title: podcast.title,
           text: podcast.description,
           url: shareUrl,
         });
-        await fetch(`/api/analytics/${id}/share`, { method: 'POST' });
-       
+        await updateAnalytics("share");
         toast({
           title: "Shared successfully",
           description: "The podcast link has been shared.",
         });
       } catch (error) {
         console.error("Error sharing:", error);
-        // Fallback to copying to clipboard
         navigator.clipboard.writeText(shareUrl);
         toast({
           title: "Link copied",
@@ -196,35 +171,62 @@ export function PodcastDetails({ id }: PodcastDetailsProps) {
   };
 
   if (!podcast) {
-    return <div><PodcastDetailsSkeleton/></div>;
+    return (
+      <div>
+        <PodcastDetailsSkeleton />
+      </div>
+    );
   }
+  {
+    console.log("podcast: ", podcast);
+  }
+  const ageData = {
+    labels: Object.keys(podcast.analytics.listenerDemographics.age),
+    datasets: [
+      {
+        data: Object.values(podcast.analytics.listenerDemographics.age),
+        backgroundColor: [
+          "#FF6384",
+          "#36A2EB",
+          "#FFCE56",
+          "#4BC0C0",
+          "#9966FF",
+        ],
+      },
+    ],
+  };
 
-    { console.log("analytics: ", analytics)}
-    // Prepare chart data
-    const ageData = {
-      labels: Object.keys(analytics.listenerDemographics.age),
-      datasets: [{
-        data: Object.values(analytics.listenerDemographics.age),
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
-      }]
-    };
+  const genderData = {
+    labels: Object.keys(podcast.analytics.listenerDemographics.gender),
+    datasets: [
+      {
+        data: Object.values(podcast.analytics.listenerDemographics.gender),
+        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+      },
+    ],
+  };
 
-    const genderData = {
-      labels: Object.keys(analytics.listenerDemographics.gender),
-      datasets: [{
-        data: Object.values(analytics.listenerDemographics.gender),
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-      }]
-    };
-  
-    const deviceData = {
-      labels: analytics.deviceInfo.map(item => item.device),
-      datasets: [{
-        label: 'Device Usage',
-        data: analytics.deviceInfo.map(item => item.count),
-        backgroundColor: 'rgba(75, 192, 192, 0.6)',
-      }]
-    };
+  const deviceData = {
+    labels: podcast.analytics.deviceInfo.map((item) => item.device),
+    datasets: [
+      {
+        label: "Device Usage",
+        data: podcast.analytics.deviceInfo.map((item) => item.count),
+        backgroundColor: "rgba(75, 192, 192, 0.6)",
+      },
+    ],
+  };
+
+  const geographicalData = {
+    labels: podcast.analytics.geographicalData.map((item) => item.country),
+    datasets: [
+      {
+        label: "Geographical Distribution",
+        data: podcast.analytics.geographicalData.map((item) => item.count),
+        backgroundColor: "rgba(153, 102, 255, 0.6)",
+      },
+    ],
+  };
 
   return (
     <AnimatePresence>
@@ -234,9 +236,11 @@ export function PodcastDetails({ id }: PodcastDetailsProps) {
         exit={{ opacity: 0, y: -20 }}
         transition={{ duration: 0.5 }}
       >
-        <Card className="w-full max-w-4xl mx-auto overflow-hidden">
+        <Card className="w-full max-w-4xl mx-auto overflow-hidden mb-8">
           <CardHeader className="bg-gradient-to-r from-green-400 to-blue-500 text-white">
-            <CardTitle className="text-3xl font-bold">{podcast.title}</CardTitle>
+            <CardTitle className="text-3xl font-bold">
+              {podcast.title}
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6 p-6">
             <motion.div
@@ -281,8 +285,16 @@ export function PodcastDetails({ id }: PodcastDetailsProps) {
                 )}
                 {isPlaying ? "Pause" : "Play"}
               </Button>
-              <Button 
-                onClick={handleShare} 
+              <Button
+                onClick={handleDownload}
+                variant="outline"
+                className="border-green-500 text-green-500 hover:bg-green-50 transform transition hover:scale-105"
+              >
+                <Download className="mr-2" />
+                Download
+              </Button>
+              <Button
+                onClick={handleShare}
                 variant="outline"
                 className="border-green-500 text-green-500 hover:bg-green-50 transform transition hover:scale-105"
               >
@@ -292,55 +304,47 @@ export function PodcastDetails({ id }: PodcastDetailsProps) {
             </motion.div>
 
             <motion.div
-              className="grid grid-cols-2 gap-4 bg-gray-100 p-4 rounded-lg"
+              className="grid grid-cols-1 md:grid-cols-2 gap-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8 }}
             >
-              <div className="flex items-center">
-                <Clock className="mr-2 text-green-500" />
-                <span>
-                  {duration ? `${Math.floor(duration / 60)}:${(duration % 60).toString().padStart(2, "0")}` : "Loading..."}
-                </span>
-              </div>
-              <div className="flex items-center">
-                <Tag className="mr-2 text-green-500" />
-                <span>{podcast.tags.join(", ")}</span>
-              </div>
-              <div className="flex items-center">
-                <User className="mr-2 text-green-500" />
-                <span>{podcast.analytics?.listens || 0} listens</span>
-              </div>
-              <div className="flex items-center">
-                <Share2 className="mr-2 text-green-500" />
-                <span>{podcast.analytics?.shares || 0} shares</span>
-              </div>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <BarChart2 className="mr-2" />
+                    Total Plays
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-4xl font-bold text-center text-green-600">
+                  {podcast.analytics.totalPlays}
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Download className="mr-2" />
+                    Total Downloads
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-4xl font-bold text-center text-blue-600">
+                  {podcast.analytics.totalDownloads}
+                </CardContent>
+              </Card>
             </motion.div>
-          </CardContent>
-          <CardContent className="space-y-6 p-6">
-            <h3 className="text-2xl font-bold">Analytics</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <motion.div
+              className="grid grid-cols-1 md:grid-cols-2 gap-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1 }}
+            >
               <Card>
                 <CardHeader>
-                  <CardTitle>Total Downloads</CardTitle>
-                </CardHeader>
-                <CardContent className="text-4xl font-bold text-center">
-                  {analytics.totalDownloads}
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Total Plays</CardTitle>
-                </CardHeader>
-                <CardContent className="text-4xl font-bold text-center">
-                  {analytics.totalPlays}
-                </CardContent>
-              </Card>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Age Demographics</CardTitle>
+                  <CardTitle className="flex items-center">
+                    <Users className="mr-2" />
+                    Age Demographics
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <Pie data={ageData} />
@@ -348,25 +352,49 @@ export function PodcastDetails({ id }: PodcastDetailsProps) {
               </Card>
               <Card>
                 <CardHeader>
-                  <CardTitle>Gender Demographics</CardTitle>
+                  <CardTitle className="flex items-center">
+                    <Users className="mr-2" />
+                    Gender Demographics
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <Pie data={genderData} />
                 </CardContent>
               </Card>
-            </div>
-            <Card>
-              <CardHeader>
-                <CardTitle>Device Usage</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Bar data={deviceData} />
-              </CardContent>
-            </Card>
+            </motion.div>
+
+            <motion.div
+              className="grid grid-cols-1 gap-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.2 }}
+            >
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Globe className="mr-2" />
+                    Geographical Distribution
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Bar data={geographicalData} />
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <BarChart2 className="mr-2" />
+                    Device Usage
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Bar data={deviceData} />
+                </CardContent>
+              </Card>
+            </motion.div>
           </CardContent>
         </Card>
       </motion.div>
     </AnimatePresence>
   );
 }
-

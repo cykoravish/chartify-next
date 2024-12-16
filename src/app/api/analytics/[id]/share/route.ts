@@ -10,11 +10,14 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       { podcast: params.id },
       { $inc: { 'geographicalData.$[elem].count': 1 } },
       { 
-        new: true, 
-        upsert: true,
+        new: true,
         arrayFilters: [{ 'elem.country': 'Unknown' }]
       }
     );
+
+    if (!analytics) {
+      return NextResponse.json({ error: "Analytics not found" }, { status: 404 });
+    }
 
     return NextResponse.json(analytics);
   } catch (error) {
