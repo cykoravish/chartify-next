@@ -1,9 +1,13 @@
-
+export const config = {
+  api: {
+    responseLimit: "100mb",
+  },
+};
 // Option 1: Disable caching for the specific route
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 // Option 2: For API routes, explicitly disable caching
-export const revalidate = 0
+export const revalidate = 0;
 
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
