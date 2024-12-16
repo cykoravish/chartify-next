@@ -6,7 +6,7 @@ import Podcast from "@/models/Podcast";
 import Analytics from "@/models/Analytics";
 import { User } from "@/models/User";
 import { v2 as cloudinary } from "cloudinary";
-console.log("initila, route.ts file /podcast");
+console.log("POST initila, route.ts file /podcast");
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -15,18 +15,18 @@ cloudinary.config({
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
-  console.log("test 1. session: ", session);
+  console.log("POST 1. session: ", session);
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   await dbConnect();
-  console.log("test 2. db connected");
+  console.log("POST 2. db connected");
   try {
     const formData = await req.formData();
-    console.log("test 3 formData: ", formData);
+    console.log("POST 3 formData: ", formData);
     const file = formData.get("file") as File;
-    console.log("test 4: ", file);
+    console.log("POST 4: ", file);
     const title = formData.get("title") as string;
     const description = formData.get("description") as string;
     const tags = formData.get("tags") as string;
@@ -36,17 +36,17 @@ export async function POST(req: Request) {
     }
 
     const buffer = await file.arrayBuffer();
-    console.log("buffer: ", buffer);
+    console.log("POST buffer: ", buffer);
     const base64File = Buffer.from(buffer).toString("base64");
     const dataURI = `data:${file.type};base64,${base64File}`;
-    console.log("data uri: ", dataURI);
+    console.log("POST data uri: ", dataURI);
     const uploadResponse = await cloudinary.uploader.upload(dataURI, {
       resource_type: "auto",
       folder: "podcasts",
     });
-    console.log("upload RESPONSE: ", uploadResponse);
+    console.log("POST upload RESPONSE: ", uploadResponse);
     const user = await User.findOne({ email: session.user.email });
-    console.log("user:", user);
+    console.log("POST user:", user);
     // Create the podcast first
     const podcast = new Podcast({
       title,
