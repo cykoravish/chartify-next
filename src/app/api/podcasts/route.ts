@@ -3,7 +3,7 @@ export const config = {
     responseLimit: false,
   },
   bodyParser: {
-    sizeLimit: "100mb", // Set the desired size limit (adjust as necessary)
+    sizeLimit: "100mb", 
   },
 };
 
@@ -22,12 +22,14 @@ import Analytics from "@/models/Analytics";
 import { User } from "@/models/User";
 import { v2 as cloudinary } from "cloudinary";
 console.log("POST initila, route.ts file /podcast");
+
+console.log("cloudinary 1")
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
-
+console.log("cloudinary 2")
 export async function POST(req: Request) {
   console.log("api hit post POST");
   const session = await getServerSession(authOptions);
