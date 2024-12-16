@@ -11,7 +11,13 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Define protected routes
-  const protectedRoutes = ["/dashboard", "/podcasts","/podcasts/upload", "/settings"];
+  const protectedRoutes = [
+    "/dashboard",
+    "/podcasts",
+    "/podcasts/upload",
+    "/podcasts",
+    "/settings",
+  ];
 
   // Check if the pathname starts with any of the protected routes
   const isProtectedRoute = protectedRoutes.some((route) =>
@@ -37,7 +43,9 @@ export const config = {
     "/login",
     "/signup",
     "/about",
-    "/podcasts/:path*",
+    "/podcasts",
+    "/podcasts/id",
+    "/podcasts/upload",
     "/pricing",
     "/settings",
   ],

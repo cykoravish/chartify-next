@@ -20,11 +20,16 @@ export async function POST(request: NextRequest) {
     // Hash the password
     const hashedPassword = await hash(password, 10);
 
+    const randomNumber = Math.floor(Math.random() * 100);
+    const gender = Math.random() < 0.5 ? "men" : "women";
+    const image = `https://randomuser.me/api/portraits/${gender}/${randomNumber}.jpg`;
+
     // Create new user
     const user = new User({
       name,
       email,
       password: hashedPassword,
+      image,
     });
 
     await user.save();

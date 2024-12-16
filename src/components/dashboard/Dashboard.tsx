@@ -18,7 +18,6 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DashboardSkeleton } from "./skeleton";
 import Link from "next/link";
-import { Upload } from "lucide-react";
 
 ChartJS.register(
   CategoryScale,
