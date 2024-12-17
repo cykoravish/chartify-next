@@ -115,45 +115,41 @@ export function PodcastDetails({ id }: PodcastDetailsProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const { updateAnalytics } = useAnalytics();
 
-  const socialPlatforms = [
-    {
-      name: "WhatsApp",
-      icon: FaWhatsapp,
-      link: (url: string) =>
-        `https://api.whatsapp.com/send?text=${encodeURIComponent(url)}`,
-    },
-    {
-      name: "Twitter",
-      icon: TwitterIcon,
-      link: (url: string) =>
-        `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}`,
-    },
-    {
-      name: "Facebook",
-      icon: FacebookIcon,
-      link: (url: string) =>
-        `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-          url
-        )}`,
-    },
-    {
-      name: "Spotify",
-      icon: FaSpotify,
-      link: (url: string) =>
-        `https://open.spotify.com/search/${encodeURIComponent(
-          podcast?.title || ""
-        )}`,
-    },
-    {
-      name: "Instagram",
-      icon: InstagramIcon,
-      link: (url: string) =>
-        `https://www.instagram.com/share?url=${encodeURIComponent(url)}`,
-    },
-  ];
+// Update the socialPlatforms array
+const socialPlatforms = [
+  {
+    name: "WhatsApp",
+    icon: FaWhatsapp,
+    link: (url: string, text: string) =>
+      `https://api.whatsapp.com/send?text=${encodeURIComponent(text + " " + url)}`,
+  },
+  {
+    name: "Twitter",
+    icon: TwitterIcon,
+    link: (url: string, text: string) =>
+      `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
+  },
+  {
+    name: "Facebook",
+    icon: FacebookIcon,
+    link: (url: string, text: string) =>
+      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(text)}`,
+  },
+  {
+    name: "Spotify",
+    icon: FaSpotify,
+    link: (url: string, text: string) =>
+      `https://open.spotify.com/search/${encodeURIComponent(podcast?.title || "")}`,
+  },
+  {
+    name: "Instagram",
+    icon: InstagramIcon,
+    link: (url: string, text: string) =>
+      `https://www.instagram.com/share?url=${encodeURIComponent(url)}&caption=${encodeURIComponent(text)}`,
+  },
+];
 
   useEffect(() => {
-    
     const fetchPodcast = async () => {
       try {
         const response = await fetch(`/api/podcasts/${id}`);
@@ -185,7 +181,6 @@ export function PodcastDetails({ id }: PodcastDetailsProps) {
           setProgress(0);
           setCurrentTime(0);
         });
-
       } catch (error) {
         console.error("Error fetching podcast:", error);
         toast({
@@ -208,33 +203,27 @@ export function PodcastDetails({ id }: PodcastDetailsProps) {
     };
   }, [id]);
 
-
-
- // UPDATED: More robust play/pause toggle
- const togglePlayPause = async () => {
-  if (audioRef.current) {
-    if (isPlaying) {
-      audioRef.current.pause();
-    } else {
-      try {
-        await audioRef.current.play();
-        await updateAnalytics("play", id);
-      } catch (error) {
-        console.error("Error playing audio:", error);
-        toast({
-          title: "Playback Error",
-          description: "Unable to play the podcast.",
-          variant: "destructive",
-        });
+  // UPDATED: More robust play/pause toggle
+  const togglePlayPause = async () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        try {
+          await audioRef.current.play();
+          await updateAnalytics("play", id);
+        } catch (error) {
+          console.error("Error playing audio:", error);
+          toast({
+            title: "Playback Error",
+            description: "Unable to play the podcast.",
+            variant: "destructive",
+          });
+        }
       }
+      setIsPlaying(!isPlaying);
     }
-    setIsPlaying(!isPlaying);
-  }
-};
-
-
-
-  
+  };
 
   // Format time to MM:SS
   const formatTime = (timeInSeconds: number) => {
@@ -245,30 +234,29 @@ export function PodcastDetails({ id }: PodcastDetailsProps) {
       .padStart(2, "0")}`;
   };
 
-
   const handleDownload = async () => {
     if (podcast) {
       try {
         // Fetch the audio file as a blob
         const response = await fetch(podcast.fileUrl);
         const blob = await response.blob();
-        
+
         // Create a temporary anchor element to trigger download
-        const link = document.createElement('a');
+        const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
         link.download = `${podcast.title}.mp3`;
-        
+
         // Append to body, click, and remove
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-  
+
         // Clean up the created URL
         URL.revokeObjectURL(link.href);
-  
+
         // Update analytics
         await updateAnalytics("download", id);
-  
+
         // Optional: Show a success toast
         toast({
           title: "Download Started",
@@ -288,8 +276,6 @@ export function PodcastDetails({ id }: PodcastDetailsProps) {
   const handleShare = async () => {
     if (podcast) {
       const shareUrl = `${window.location.origin}/podcasts/${podcast._id}`;
-      
-      // Open share modal instead of direct sharing
       setIsShareModalOpen(true);
       await updateAnalytics("share", id);
     }
@@ -385,10 +371,12 @@ export function PodcastDetails({ id }: PodcastDetailsProps) {
         transition={{ duration: 0.5 }}
         className="space-y-8"
       >
-{/* Podcast Card with Audio Player */}
-<Card className="w-full overflow-hidden">
+        {/* Podcast Card with Audio Player */}
+        <Card className="w-full overflow-hidden">
           <CardHeader className="bg-gradient-to-r from-green-400 to-blue-500 text-white p-6">
-            <CardTitle className="text-3xl font-bold">{podcast?.title}</CardTitle>
+            <CardTitle className="text-3xl font-bold">
+              {podcast?.title}
+            </CardTitle>
           </CardHeader>
           <CardContent className="p-6 space-y-6">
             {/* Audio Progress Bar */}
@@ -413,10 +401,14 @@ export function PodcastDetails({ id }: PodcastDetailsProps) {
                 whileTap={{ scale: 0.95 }}
                 className="flex items-center bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition-colors"
               >
-                {isPlaying ? <Pause className="mr-2" /> : <Play className="mr-2" />}
+                {isPlaying ? (
+                  <Pause className="mr-2" />
+                ) : (
+                  <Play className="mr-2" />
+                )}
                 {isPlaying ? "Pause" : "Play"}
               </motion.button>
-              
+
               <motion.button
                 onClick={handleDownload}
                 whileHover={{ scale: 1.05 }}
@@ -426,7 +418,7 @@ export function PodcastDetails({ id }: PodcastDetailsProps) {
                 <Download className="mr-2" />
                 Download
               </motion.button>
-              
+
               <motion.button
                 onClick={handleShare}
                 whileHover={{ scale: 1.05 }}
@@ -439,33 +431,40 @@ export function PodcastDetails({ id }: PodcastDetailsProps) {
             </div>
           </CardContent>
         </Card>
-
-         {/* Share Modal */}
-         <Dialog open={isShareModalOpen} onOpenChange={setIsShareModalOpen}>
+        {/* Share Modal */}
+        {/* // In the return statement, update the Dialog component: */}
+        <Dialog open={isShareModalOpen} onOpenChange={setIsShareModalOpen}>
           <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle className="flex justify-between items-center">
+            <DialogHeader className="relative">
+              <DialogTitle className="text-xl font-semibold">
                 Share Podcast
-                <motion.button 
-                  onClick={() => setIsShareModalOpen(false)}
-                  whileHover={{ rotate: 90 }}
-                >
-                  <X className="h-6 w-6" />
-                </motion.button>
               </DialogTitle>
+              <motion.button
+                onClick={() => setIsShareModalOpen(false)}
+                whileHover={{ rotate: 90 }}
+                className="absolute top-0 right-0"
+              >
+                <X className="h-6 w-6 text-gray-500 hover:text-gray-700" />
+              </motion.button>
             </DialogHeader>
+
             <div className="flex flex-col space-y-4">
               {/* URL Copy Section */}
               <div className="flex items-center space-x-2">
-                <input 
-                  type="text" 
-                  readOnly 
+                <input
+                  type="text"
+                  readOnly
                   value={`${window.location.origin}/podcasts/${podcast?._id}`}
-                  className="flex-grow p-2 border rounded-md"
+                  className="flex-grow p-2 border rounded-md text-sm"
                 />
                 <motion.button
-                  onClick={() => copyToClipboard(`${window.location.origin}/podcasts/${podcast?._id}`)}
+                  onClick={() =>
+                    copyToClipboard(
+                      `${window.location.origin}/podcasts/${podcast?._id}`
+                    )
+                  }
                   whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
                 >
                   <Copy className="h-5 w-5 text-green-500" />
                 </motion.button>
@@ -473,23 +472,33 @@ export function PodcastDetails({ id }: PodcastDetailsProps) {
 
               {/* Social Share Platforms */}
               <div className="flex justify-center space-x-6 py-4">
-                {socialPlatforms.map((platform) => (
-                  <motion.a
-                    key={platform.name}
-                    href={platform.link(`${window.location.origin}/podcasts/${podcast?._id}`)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.2 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <platform.icon className="h-8 w-8 text-green-500 hover:text-green-600" />
-                  </motion.a>
-                ))}
+                {socialPlatforms.map((platform) => {
+                  // Construct share text with podcast details
+                  const shareText = `Check out this awesome podcast: ${podcast?.title}`;
+
+                  const shareLink = platform.link(
+                    `${window.location.origin}/podcasts/${podcast?._id}`,
+                    shareText
+                  );
+
+                  return (
+                    <motion.a
+                      key={platform.name}
+                      href={shareLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileHover={{ scale: 1.2 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="hover:opacity-80 transition-opacity"
+                    >
+                      <platform.icon className="h-8 w-8 text-green-500" />
+                    </motion.a>
+                  );
+                })}
               </div>
             </div>
           </DialogContent>
         </Dialog>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <Card>
             <CardHeader>
@@ -550,7 +559,6 @@ export function PodcastDetails({ id }: PodcastDetailsProps) {
             </CardContent>
           </Card>
         </div>
-
         <Card>
           <CardHeader>
             <CardTitle className="text-xl font-semibold flex items-center">
@@ -572,7 +580,6 @@ export function PodcastDetails({ id }: PodcastDetailsProps) {
             />
           </CardContent>
         </Card>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <Card>
             <CardHeader>
