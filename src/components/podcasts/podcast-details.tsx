@@ -153,6 +153,7 @@ export function PodcastDetails({ id }: PodcastDetailsProps) {
   ];
 
   useEffect(() => {
+    
     const fetchPodcast = async () => {
       try {
         const response = await fetch(`/api/podcasts/${id}`);
@@ -163,19 +164,28 @@ export function PodcastDetails({ id }: PodcastDetailsProps) {
         setPodcast(data);
 
         const audio = new Audio(data.fileUrl);
+        audioRef.current = audio;
+
         audio.addEventListener("loadedmetadata", () => {
           setDuration(Math.round(audio.duration));
         });
 
-        // Setup audio ref
-        audioRef.current = audio;
-
         // Add event listeners for progress tracking
         audio.addEventListener("timeupdate", () => {
-          const progressPercent = (audio.currentTime / audio.duration) * 100;
-          setProgress(progressPercent);
-          setCurrentTime(audio.currentTime);
+          if (audio.duration) {
+            const progressPercent = (audio.currentTime / audio.duration) * 100;
+            setProgress(progressPercent);
+            setCurrentTime(audio.currentTime);
+          }
         });
+
+        // Audio ended event
+        audio.addEventListener("ended", () => {
+          setIsPlaying(false);
+          setProgress(0);
+          setCurrentTime(0);
+        });
+
       } catch (error) {
         console.error("Error fetching podcast:", error);
         toast({
@@ -192,16 +202,39 @@ export function PodcastDetails({ id }: PodcastDetailsProps) {
     return () => {
       if (audioRef.current) {
         audioRef.current.pause();
+        audioRef.current.currentTime = 0;
         audioRef.current = null;
       }
     };
   }, [id]);
 
-  useEffect(() => {
-    if (podcast) {
-      audioRef.current = new Audio(podcast.fileUrl);
+
+
+ // UPDATED: More robust play/pause toggle
+ const togglePlayPause = async () => {
+  if (audioRef.current) {
+    if (isPlaying) {
+      audioRef.current.pause();
+    } else {
+      try {
+        await audioRef.current.play();
+        await updateAnalytics("play", id);
+      } catch (error) {
+        console.error("Error playing audio:", error);
+        toast({
+          title: "Playback Error",
+          description: "Unable to play the podcast.",
+          variant: "destructive",
+        });
+      }
     }
-  }, [podcast]);
+    setIsPlaying(!isPlaying);
+  }
+};
+
+
+
+  
 
   // Format time to MM:SS
   const formatTime = (timeInSeconds: number) => {
@@ -212,17 +245,6 @@ export function PodcastDetails({ id }: PodcastDetailsProps) {
       .padStart(2, "0")}`;
   };
 
-  const togglePlayPause = async () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play();
-        await updateAnalytics("play", id);
-      }
-      setIsPlaying(!isPlaying);
-    }
-  };
 
   const handleDownload = async () => {
     if (podcast) {

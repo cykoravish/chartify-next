@@ -3,6 +3,7 @@ import { DashboardHeader } from "@/components/dashboard/header";
 import { DashboardShell } from "@/components/dashboard/shell";
 import { PodcastDetails } from "@/components/podcasts/podcast-details";
 import { PodcastDetailsSkeleton } from "@/components/podcasts/podcast-details-skeleton";
+import Footer from "@/components/Footer";
 
 export default function PodcastDetailsPage({
   params,
@@ -23,6 +24,7 @@ export default function PodcastDetailsPage({
           <PodcastDetails id={id} />
         </Suspense>
       </DashboardShell>
+      <Footer/>
     </div>
   );
 }
