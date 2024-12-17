@@ -147,7 +147,7 @@ export function PodcastDetails({ id }: PodcastDetailsProps) {
 
   const handleShare = async () => {
     if (podcast) {
-      const shareUrl = `${window.location.origin}/podcast/${podcast._id}`;
+      const shareUrl = `${window.location.origin}/podcasts/${podcast._id}`;
       try {
         await navigator.share({
           title: podcast.title,

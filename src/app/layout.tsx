@@ -38,12 +38,12 @@ export default function RootLayout({
         <title>Chartify - Alternative to chartable</title>
       </head>
       <body className="font-serif bg-gradient-to-br from-purple-50 to-green-100">
-        <ThemeProvider
+        {/* <ThemeProvider
           attribute="class"
           defaultTheme="light"
           enableSystem
           disableTransitionOnChange
-        >
+        > */}
           <AuthProvider>
             <Suspense fallback={<LoadingPage />}>
               <Navbar />
@@ -52,7 +52,7 @@ export default function RootLayout({
             <Tos />
             <Toaster />
           </AuthProvider>
-        </ThemeProvider>
+        {/* </ThemeProvider> */}
       </body>
     </html>
   );

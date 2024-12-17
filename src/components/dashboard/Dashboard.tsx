@@ -72,7 +72,13 @@ export function Dashboard() {
   );
 
   const downloadData = {
-    labels: podcasts.map((podcast) => podcast.title),
+    labels: podcasts
+    .slice(0, 4)
+    .map((podcast) => 
+      podcast.title.length > 15 
+        ? podcast.title.slice(0, 15) + "..." 
+        : podcast.title
+    ),
     datasets: [
       {
         label: "Downloads",
@@ -84,7 +90,13 @@ export function Dashboard() {
   };
 
   const playData = {
-    labels: podcasts.map((podcast) => podcast.title),
+    labels: podcasts
+    .slice(0, 4)
+    .map((podcast) => 
+      podcast.title.length > 15 
+        ? podcast.title.slice(0, 15) + "..." 
+        : podcast.title
+    ),
     datasets: [
       {
         label: "Plays",
@@ -93,6 +105,8 @@ export function Dashboard() {
       },
     ],
   };
+
+
 
   const demographicData = {
     labels: ["18-24", "25-34", "35-44", "45-54", "55+"],
@@ -136,6 +150,8 @@ export function Dashboard() {
     ],
   };
 
+
+
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       <motion.div
@@ -146,13 +162,13 @@ export function Dashboard() {
         <Card>
           <CardHeader>
             <CardTitle className="text-green-500">
-            see your podscasts analytics
+            Watch the analytics
             </CardTitle>
           </CardHeader>
           <CardContent>
             <Link href="/podcasts">
               <button className="bg-green-500 text-white py-2 px-3 rounded-lg font-medium hover:text-green-600 border border-green-500 hover:bg-green-300">
-                see your podscasts analytics
+                see each podscast growth
               </button>
             </Link>
           </CardContent>
