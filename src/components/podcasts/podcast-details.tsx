@@ -248,15 +248,40 @@ export function PodcastDetails({ id }: PodcastDetailsProps) {
 
   const handleDownload = async () => {
     if (podcast) {
-      await updateAnalytics("download", id);
-      // window.open(podcast.fileUrl, "_blank");
-      // Create a temporary anchor element to trigger download
-      const link = document.createElement("a");
-      link.href = podcast.fileUrl;
-      link.download = `${podcast.title}.mp3`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      try {
+        // Fetch the audio file as a blob
+        const response = await fetch(podcast.fileUrl);
+        const blob = await response.blob();
+        
+        // Create a temporary anchor element to trigger download
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `${podcast.title}.mp3`;
+        
+        // Append to body, click, and remove
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+  
+        // Clean up the created URL
+        URL.revokeObjectURL(link.href);
+  
+        // Update analytics
+        await updateAnalytics("download", id);
+  
+        // Optional: Show a success toast
+        toast({
+          title: "Download Started",
+          description: `Downloading ${podcast.title}`,
+        });
+      } catch (error) {
+        console.error("Download error:", error);
+        toast({
+          title: "Download Failed",
+          description: "Unable to download the podcast.",
+          variant: "destructive",
+        });
+      }
     }
   };
 
