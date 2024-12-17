@@ -2,40 +2,34 @@ import { Suspense } from "react";
 import { DashboardHeader } from "@/components/dashboard/header";
 import { DashboardShell } from "@/components/dashboard/shell";
 import { Dashboard } from "@/components/dashboard/Dashboard";
-import { Button } from "@/components/ui/button";
-import { MonthlyGrowthChart } from "@/components/dashboard/monthly-growth";
 import { DashboardSkeleton } from "@/components/dashboard/skeleton";
-import { DashboardCards } from "@/components/dashboard/cards";
-import { TopEpisodes } from "@/components/dashboard/top-episodes";
 import Link from "next/link";
-import { Upload } from "lucide-react";
+import { Upload } from 'lucide-react';
 import Footer from "@/components/Footer";
 
 export default function DashboardPage() {
   return (
-    <div className="pt-8 px-2">
-      <DashboardShell>
-        <DashboardHeader
-          heading="Dashboard"
-          text="View your podcast analytics at a glance."
-        >
-          <Link href="/podcasts/upload">
-            <button className="bg-green-600 py-2 px-3 rounded-lg text-white hover:bg-green-500 font-medium">
-              <Upload className="w-5 h-5 inline mr-2" />
-              Upload Podcast
-            </button>
-          </Link>
-        </DashboardHeader>
-        <div className="grid gap-8">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 dark:from-green-900 dark:to-blue-900">
+      <div className="container mx-auto px-4 py-8">
+        <DashboardShell>
+          <DashboardHeader
+            heading="Podcast Analytics Dashboard"
+            text="Get insights into your podcast performance"
+          >
+            <Link href="/podcasts/upload">
+              <button className="bg-green-600 py-2 px-4 rounded-lg text-white hover:bg-green-500 font-medium transition-all duration-300 transform hover:scale-105">
+                <Upload className="w-5 h-5 inline mr-2" />
+                Upload Podcast
+              </button>
+            </Link>
+          </DashboardHeader>
           <Suspense fallback={<DashboardSkeleton />}>
             <Dashboard />
-            {/* <MonthlyGrowthChart/>
-          <DashboardCards/>
-          <TopEpisodes/> */}
           </Suspense>
-        </div>
-      </DashboardShell>
+        </DashboardShell>
+      </div>
       <Footer />
     </div>
   );
 }
+

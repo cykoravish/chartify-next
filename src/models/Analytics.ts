@@ -14,6 +14,10 @@ const AnalyticsSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  totalShares: {
+    type: Number,
+    default: 0,
+  },
   listenerDemographics: {
     age: {
       '18-24': { type: Number, default: 0 },

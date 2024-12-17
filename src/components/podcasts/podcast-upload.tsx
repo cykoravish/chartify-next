@@ -34,7 +34,7 @@ const formSchema = z.object({
   title: z
     .string()
     .min(2, "Title must be at least 2 characters")
-    .max(100, "Title must not exceed 100 characters"),
+    .max(28, "Title must not exceed 28 characters"),
   description: z
     .string()
     .min(10, "Description must be at least 10 characters")
@@ -121,7 +121,6 @@ export function PodcastUpload() {
       });
       console.log("response test 2:", response);
       clearInterval(progressInterval);
-
       if (!response.ok) {
         throw new Error("Failed to upload podcast");
       }

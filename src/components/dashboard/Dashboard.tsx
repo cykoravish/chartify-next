@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Line, Bar, Pie } from "react-chartjs-2";
+import { Line, Bar, Pie, Doughnut } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -18,6 +18,13 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DashboardSkeleton } from "./skeleton";
 import Link from "next/link";
+import {
+  ArrowUpRight,
+  Headphones,
+  Download,
+  Share2,
+  Users,
+} from "lucide-react";
 
 ChartJS.register(
   CategoryScale,
@@ -55,13 +62,9 @@ export function Dashboard() {
   }, []);
 
   if (loading) {
-    return (
-      <div>
-        <DashboardSkeleton />
-      </div>
-    );
+    return <DashboardSkeleton />;
   }
-
+  console.log("podcasts: ", podcasts);
   const totalDownloads = podcasts.reduce(
     (sum, podcast) => sum + podcast.analytics?.totalDownloads,
     0
@@ -70,33 +73,26 @@ export function Dashboard() {
     (sum, podcast) => sum + podcast.analytics?.totalPlays,
     0
   );
+  const totalShares = podcasts.reduce(
+    (sum, podcast) => sum + podcast.analytics?.totalShares,
+    0
+  );
 
   const downloadData = {
-    labels: podcasts
-    .slice(0, 4)
-    .map((podcast) => 
-      podcast.title.length > 15 
-        ? podcast.title.slice(0, 15) + "..." 
-        : podcast.title
-    ),
+    labels: podcasts.map((podcast) => podcast.title),
     datasets: [
       {
         label: "Downloads",
         data: podcasts.map((podcast) => podcast.analytics?.totalDownloads),
         borderColor: "rgb(75, 192, 192)",
         tension: 0.1,
+        fill: false,
       },
     ],
   };
 
   const playData = {
-    labels: podcasts
-    .slice(0, 4)
-    .map((podcast) => 
-      podcast.title.length > 15 
-        ? podcast.title.slice(0, 15) + "..." 
-        : podcast.title
-    ),
+    labels: podcasts.map((podcast) => podcast.title),
     datasets: [
       {
         label: "Plays",
@@ -105,8 +101,6 @@ export function Dashboard() {
       },
     ],
   };
-
-
 
   const demographicData = {
     labels: ["18-24", "25-34", "35-44", "45-54", "55+"],
@@ -140,82 +134,94 @@ export function Dashboard() {
           ),
         ],
         backgroundColor: [
-          "rgba(255, 99, 132, 0.5)",
-          "rgba(54, 162, 235, 0.5)",
-          "rgba(255, 206, 86, 0.5)",
-          "rgba(75, 192, 192, 0.5)",
-          "rgba(153, 102, 255, 0.5)",
+          "rgba(255, 99, 132, 0.8)",
+          "rgba(54, 162, 235, 0.8)",
+          "rgba(255, 206, 86, 0.8)",
+          "rgba(75, 192, 192, 0.8)",
+          "rgba(153, 102, 255, 0.8)",
         ],
       },
     ],
   };
 
-
+  const topPodcasts = podcasts
+    .sort((a, b) => b.analytics.totalPlays - a.analytics.totalPlays)
+    .slice(0, 5);
 
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       <motion.div
+        className="lg:col-span-3"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
         <Card>
           <CardHeader>
-            <CardTitle className="text-green-500">
-            Watch the analytics
+            <CardTitle className="text-2xl font-bold text-green-600">
+              Overall Performance
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <Link href="/podcasts">
-              <button className="bg-green-500 text-white py-2 px-3 rounded-lg font-medium hover:text-green-600 border border-green-500 hover:bg-green-300">
-                see each podscast growth
-              </button>
-            </Link>
+          <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="flex items-center space-x-4">
+              <Headphones className="w-10 h-10 text-green-500" />
+              <div>
+                <p className="text-sm text-gray-500">Total Plays</p>
+                <p className="text-2xl font-bold">
+                  {totalPlays.toLocaleString()}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-4">
+              <Download className="w-10 h-10 text-blue-500" />
+              <div>
+                <p className="text-sm text-gray-500">Total Downloads</p>
+                <p className="text-2xl font-bold">
+                  {totalDownloads.toLocaleString()}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-4">
+              <Share2 className="w-10 h-10 text-purple-500" />
+              <div>
+                <p className="text-sm text-gray-500">Total Shares</p>
+                <p className="text-2xl font-bold">
+                  {totalShares.toLocaleString()}
+                </p>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </motion.div>
+
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <Card>
-          <CardHeader>
-          <CardTitle className="text-green-500">Total Downloads</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">{totalDownloads}</div>
-          </CardContent>
-        </Card>
-      </motion.div>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-      >
-        <Card>
-          <CardHeader>
-          <CardTitle className="text-green-500">Total Plays</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">{totalPlays}</div>
-          </CardContent>
-        </Card>
-      </motion.div>
-      <motion.div
+        className="lg:col-span-2"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
         <Card>
           <CardHeader>
-          <CardTitle className="text-green-500">Downloads Over Time</CardTitle>
+            <CardTitle className="text-xl font-bold text-green-600">
+              Downloads Over Time
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <Line data={downloadData} />
+            <Line
+              data={downloadData}
+              options={{
+                responsive: true,
+                plugins: {
+                  legend: {
+                    position: "top" as const,
+                  },
+                },
+              }}
+            />
           </CardContent>
         </Card>
       </motion.div>
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -223,24 +229,89 @@ export function Dashboard() {
       >
         <Card>
           <CardHeader>
-          <CardTitle className="text-green-500">Plays by Podcast</CardTitle>
+            <CardTitle className="text-xl font-bold text-green-600">
+              Listener Demographics
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <Bar data={playData} />
+            <Doughnut
+              data={demographicData}
+              options={{
+                responsive: true,
+                plugins: {
+                  legend: {
+                    position: "right" as const,
+                  },
+                },
+              }}
+            />
           </CardContent>
         </Card>
       </motion.div>
+
       <motion.div
+        className="lg:col-span-2"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
       >
         <Card>
           <CardHeader>
-          <CardTitle className="text-green-500">Listener Demographics</CardTitle>
+            <CardTitle className="text-xl font-bold text-green-600">
+              Plays by Podcast
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <Pie data={demographicData} />
+            <Bar
+              data={playData}
+              options={{
+                responsive: true,
+                plugins: {
+                  legend: {
+                    position: "top" as const,
+                  },
+                },
+              }}
+            />
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.5 }}
+      >
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-xl font-bold text-green-600">
+              Top Performing Podcasts
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-4">
+              {topPodcasts.map((podcast, index) => (
+                <li
+                  key={podcast._id}
+                  className="flex items-center justify-between"
+                >
+                  <div className="flex items-center space-x-2">
+                    <span className="text-lg font-bold text-gray-500">
+                      {index + 1}
+                    </span>
+                    <span className="text-sm truncate">{podcast.title}</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-sm font-medium">
+                      {podcast.analytics.totalPlays} plays
+                    </span>
+                    <Link href={`/podcasts/${podcast._id}`}>
+                      <ArrowUpRight className="w-4 h-4 text-green-500" />
+                    </Link>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </CardContent>
         </Card>
       </motion.div>

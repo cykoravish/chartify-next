@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { toast } from "@/hooks/use-toast";
 
-export function useAnalytics(podcastId: string) {
+export function useAnalytics(podcastId?: string) {
   const [isUpdating, setIsUpdating] = useState(false);
 
-  const updateAnalytics = async (action: 'play' | 'download' | 'share') => {
+  const updateAnalytics = async (action: 'play' | 'download' | 'share', podcastId?:string) => {
     if (isUpdating) return;
 
     setIsUpdating(true);

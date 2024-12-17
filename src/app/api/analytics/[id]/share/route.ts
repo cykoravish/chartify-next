@@ -8,11 +8,8 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   try {
     const analytics = await Analytics.findOneAndUpdate(
       { podcast: params.id },
-      { $inc: { 'geographicalData.$[elem].count': 1 } },
-      { 
-        new: true,
-        arrayFilters: [{ 'elem.country': 'Unknown' }]
-      }
+      { $inc: { totalShares: 1 } },
+      { new: true }
     );
 
     if (!analytics) {

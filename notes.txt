@@ -165,3 +165,6 @@ Additional Suggestions
     =>NaN comming on dashboard downloads fix it
     => navbar routes fix for public and rprivat and middle watre add
     => while uploading podcase it must show upload percentafe
+    => if session is present but user is deleted from database make the user logged out
+    => welcome {username} message in dashboard. or implement settings 
+    =>no podcast upload uplaod your first podcast ui update

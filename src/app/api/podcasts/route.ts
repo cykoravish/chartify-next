@@ -58,6 +58,10 @@ export async function POST(req: NextRequest) {
 
     const user = await User.findOne({ email: session.user.email });
 
+    if (!user) {
+      return NextResponse.json({ error: "Please Logout And Craeate new Account" }, { status: 401 });
+    }
+
     // Create the podcast first
     const podcast = new Podcast({
       title,
@@ -69,12 +73,13 @@ export async function POST(req: NextRequest) {
     });
 
     await podcast.save();
-
+ 
     // Now create the analytics with the podcast reference
     const defaultAnalytics = new Analytics({
       podcast: podcast._id, // Set the podcast reference
       totalDownloads: 0,
       totalPlays: 0,
+      totalShares:0,
       listenerDemographics: {
         age: {
           "18-24": 0,
@@ -99,7 +104,7 @@ export async function POST(req: NextRequest) {
     });
 
     await defaultAnalytics.save();
-
+  
     // Update the podcast with the analytics reference
     podcast.analytics = defaultAnalytics._id;
     await podcast.save();
@@ -131,7 +136,7 @@ export async function GET(req: Request) {
     const podcasts = await Podcast.find({ user: user._id }).populate(
       "analytics"
     );
-    console.log("podcasts:", podcasts);
+
     return NextResponse.json(podcasts);
   } catch (error) {
     console.error("Error fetching podcasts:", error);
