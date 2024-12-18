@@ -1,11 +1,11 @@
-export const config = {
-  api: {
-    responseLimit: false,
-  },
-  bodyParser: {
-    sizeLimit: "100mb",
-  },
-};
+// export const config = {
+//   api: {
+//     responseLimit: false,
+//   },
+//   bodyParser: {
+//     sizeLimit: "100mb",
+//   },
+// };
 
 // export const dynamic = "force-dynamic";
 // export const revalidate = 0;

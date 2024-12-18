@@ -4,13 +4,15 @@ import Analytics from "@/models/Analytics";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  props: { params: Promise<{ id: string }> }
 ) {
+  const params = await props.params;
+  const podcastId = params.id;
   await dbConnect();
 
   try {
     const analytics = await Analytics.findOneAndUpdate(
-      { podcast: params.id },
+      { podcast: podcastId },
       { $inc: { totalDownloads: 1 } },
       { new: true }
     );
