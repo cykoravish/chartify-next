@@ -27,6 +27,7 @@ export default function AboutPage() {
           cache: "no-store",
         });
         const data = await response.json();
+        console.log("data: ", data)
         setEarlyUsers(data);
       } catch (error) {
         console.error("Error fetching early users:", error);

@@ -48,7 +48,7 @@ export async function GET() {
       id: user._id.toString(),
       email: user.email,
       name: user.name,
-      image: user.photo,
+      image: user.image,
       subscriptionDate: user.createdAt.toISOString().split("T")[0],
     }));
     return NextResponse.json(formattedUsers);
