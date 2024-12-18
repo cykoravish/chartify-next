@@ -521,10 +521,9 @@ const socialPlatforms = [
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-gray-600">Avg. Listening Duration</span>
+                <span className="text-gray-600">Total Shared</span>
                 <span className="text-2xl font-bold text-purple-600">
-                  {Math.round(podcast.analytics.listeningDuration.average / 60)}{" "}
-                  min
+                  {podcast.analytics.totalShares}
                 </span>
               </div>
             </CardContent>
