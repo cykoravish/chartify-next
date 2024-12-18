@@ -18,13 +18,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DashboardSkeleton } from "./skeleton";
 import Link from "next/link";
-import {
-  ArrowUpRight,
-  Headphones,
-  Download,
-  Share2,
-  Users,
-} from "lucide-react";
+import { ArrowUpRight, Headphones, Download, Share2, Users } from 'lucide-react';
 
 ChartJS.register(
   CategoryScale,
@@ -149,43 +143,45 @@ export function Dashboard() {
     .slice(0, 5);
 
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
       <motion.div
         className="lg:col-span-3"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <Card>
+        <Card className="h-[300px] sm:h-auto">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold text-green-600">
+            <CardTitle className="text-xl sm:text-2xl font-bold text-green-600">
               Overall Performance
             </CardTitle>
           </CardHeader>
-          <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <CardContent className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="flex items-center space-x-4">
-              <Headphones className="w-10 h-10 text-green-500" />
+              <Headphones className="w-8 h-8 sm:w-10 sm:h-10 text-green-500" />
               <div>
-                <p className="text-sm text-gray-500">Total Plays</p>
-                <p className="text-2xl font-bold">
+                <p className="text-xs sm:text-sm text-gray-500">Total Plays</p>
+                <p className="text-lg sm:text-2xl font-bold">
                   {totalPlays.toLocaleString()}
                 </p>
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <Download className="w-10 h-10 text-blue-500" />
+              <Download className="w-8 h-8 sm:w-10 sm:h-10 text-blue-500" />
               <div>
-                <p className="text-sm text-gray-500">Total Downloads</p>
-                <p className="text-2xl font-bold">
+                <p className="text-xs sm:text-sm text-gray-500">
+                  Total Downloads
+                </p>
+                <p className="text-lg sm:text-2xl font-bold">
                   {totalDownloads.toLocaleString()}
                 </p>
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <Share2 className="w-10 h-10 text-purple-500" />
+              <Share2 className="w-8 h-8 sm:w-10 sm:h-10 text-purple-500" />
               <div>
-                <p className="text-sm text-gray-500">Total Shares</p>
-                <p className="text-2xl font-bold">
+                <p className="text-xs sm:text-sm text-gray-500">Total Shares</p>
+                <p className="text-lg sm:text-2xl font-bold">
                   {totalShares.toLocaleString()}
                 </p>
               </div>
@@ -200,17 +196,19 @@ export function Dashboard() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <Card>
+        <Card className="h-[300px] sm:h-auto">
           <CardHeader>
-            <CardTitle className="text-xl font-bold text-green-600">
+            <CardTitle className="text-lg sm:text-xl font-bold text-green-600">
               Downloads Over Time
             </CardTitle>
           </CardHeader>
           <CardContent>
+            <div className="h-[200px] sm:h-[300px]">
             <Line
               data={downloadData}
               options={{
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                   legend: {
                     position: "top" as const,
@@ -218,6 +216,7 @@ export function Dashboard() {
                 },
               }}
             />
+            </div>
           </CardContent>
         </Card>
       </motion.div>
@@ -227,17 +226,19 @@ export function Dashboard() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.3 }}
       >
-        <Card>
+        <Card className="h-[300px] sm:h-auto">
           <CardHeader>
-            <CardTitle className="text-xl font-bold text-green-600">
+            <CardTitle className="text-lg sm:text-xl font-bold text-green-600">
               Listener Demographics
             </CardTitle>
           </CardHeader>
           <CardContent>
+            <div className="h-[200px] sm:h-[300px]">
             <Doughnut
               data={demographicData}
               options={{
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                   legend: {
                     position: "right" as const,
@@ -245,6 +246,7 @@ export function Dashboard() {
                 },
               }}
             />
+            </div>
           </CardContent>
         </Card>
       </motion.div>
@@ -255,17 +257,19 @@ export function Dashboard() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
       >
-        <Card>
+        <Card className="h-[300px] sm:h-auto">
           <CardHeader>
-            <CardTitle className="text-xl font-bold text-green-600">
+            <CardTitle className="text-lg sm:text-xl font-bold text-green-600">
               Plays by Podcast
             </CardTitle>
           </CardHeader>
           <CardContent>
+            <div className="h-[200px] sm:h-[300px]">
             <Bar
               data={playData}
               options={{
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                   legend: {
                     position: "top" as const,
@@ -273,6 +277,7 @@ export function Dashboard() {
                 },
               }}
             />
+            </div>
           </CardContent>
         </Card>
       </motion.div>
@@ -282,9 +287,9 @@ export function Dashboard() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.5 }}
       >
-        <Card>
+        <Card className="h-[300px] sm:h-auto">
           <CardHeader>
-            <CardTitle className="text-xl font-bold text-green-600">
+            <CardTitle className="text-lg sm:text-xl font-bold text-green-600">
               Top Performing Podcasts
             </CardTitle>
           </CardHeader>
@@ -296,13 +301,15 @@ export function Dashboard() {
                   className="flex items-center justify-between"
                 >
                   <div className="flex items-center space-x-2">
-                    <span className="text-lg font-bold text-gray-500">
+                    <span className="text-base sm:text-lg font-bold text-gray-500">
                       {index + 1}
                     </span>
-                    <span className="text-sm truncate">{podcast.title}</span>
+                    <span className="text-xs sm:text-sm truncate">
+                      {podcast.title}
+                    </span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <span className="text-sm font-medium">
+                    <span className="text-xs sm:text-sm font-medium">
                       {podcast.analytics.totalPlays} plays
                     </span>
                     <Link href={`/podcasts/${podcast._id}`}>
@@ -318,3 +325,4 @@ export function Dashboard() {
     </div>
   );
 }
+
