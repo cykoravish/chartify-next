@@ -369,7 +369,7 @@ const socialPlatforms = [
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
         transition={{ duration: 0.5 }}
-        className="space-y-8"
+        className="space-y-8 p-4 sm:p-6 max-w-full overflow-x-hidden"
       >
         {/* Podcast Card with Audio Player */}
         <Card className="w-full overflow-hidden">
